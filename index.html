@@ -3,123 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitHub Tool VIP Pro</title>
+  <title>AI Scan Nhan Sắc 4.0</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body {
-      background-color: #0d1117;
-      color: #58a6ff;
-      font-family: 'Consolas', monospace;
+      background: #0f172a;
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 15px;
     }
-    .box {
+    .card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 24px;
       width: 100%;
-      max-width: 500px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(0,255,100,0.2);
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid #334155;
     }
-    h2 { color: #2ea043; text-align: center; margin-bottom: 15px; }
-    input {
+    h2 { color: #38bdf8; margin-bottom: 15px; font-size: 22px; }
+    .camera-box {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      color: #fff;
-      border-radius: 6px;
-      outline: none;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #238636;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover { background: #2ea043; }
-    #log {
-      display: none;
-      margin-top: 15px;
+      height: 220px;
       background: #000;
-      color: #00ff66;
-      padding: 12px;
-      border-radius: 6px;
-      height: 160px;
-      overflow-y: auto;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-    #troll-popup {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.95);
-      color: #ff3333;
-      flex-direction: column;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
       justify-content: center;
       align-items: center;
-      text-align: center;
-      padding: 20px;
-      z-index: 9999;
+      margin-bottom: 15px;
+      border: 2px dashed #38bdf8;
+    }
+    #scanner-line {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #22c55e;
+      box-shadow: 0 0 12px #22c55e;
+      animation: scan 1.5s infinite linear;
+    }
+    @keyframes scan {
+      0% { top: 0; }
+      50% { top: 96%; }
+      100% { top: 0; }
+    }
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+    .btn-main { background: #38bdf8; color: #0f172a; width: 100%; }
+    .btn-main:hover { background: #0ea5e9; }
+    #status { margin-top: 12px; font-size: 14px; color: #94a3b8; }
+    #result-area { display: none; margin-top: 15px; }
+    .score { font-size: 32px; color: #ef4444; font-weight: bold; margin: 10px 0; }
+    .btn-dodge {
+      position: absolute;
+      background: #ef4444;
+      color: white;
+      transition: 0.1s ease;
     }
   </style>
 </head>
 <body>
 
-  <div class="box">
-    <h2>🚀 TOOL GET SOURCE CODE VIP</h2>
-    <input type="text" id="target" placeholder="Nhập tên nạn nhân / link Facebook / GitHub...">
-    <button onclick="startTroll()">BẮT ĐẦU HACK & LẤY DỮ LIỆU</button>
-    <div id="log"></div>
-  </div>
+  <div class="card">
+    <h2>✨ MÁY QUÉT NHAN SẮC AI ✨</h2>
+    
+    <div class="camera-box">
+      <span id="cam-placeholder" style="color: #64748b; font-size: 14px;">Chưa mở camera</span>
+      <div id="scanner-line"></div>
+    </div>
 
-  <div id="troll-popup">
-    <h1 style="font-size: 28px; margin-bottom: 15px;">⚠️ CẢNH BÁO: BỊ BẮT QUẢ TANG!</h1>
-    <p style="color: #fff; font-size: 18px; margin-bottom: 10px;">Toàn bộ lịch sử duyệt web và ảnh dìm của bạn đã được gửi cho phụ huynh!</p>
-    <p style="color: #ffff00; font-size: 20px; font-weight: bold;">🤣 ĐÙA TÝ THÔI! BẠN ĐÃ BỊ TROLL 100%!</p>
+    <button id="scan-btn" class="btn-main" onclick="startScan()">BẮT ĐẦU QUÉT KHUÔN MẶT</button>
+    <div id="status"></div>
+
+    <div id="result-area">
+      <p style="color: #cbd5e1;">Kết quả phân tích độ đẹp trai/xinh gái:</p>
+      <div class="score">-999 / 100 Điểm</div>
+      <p style="color: #facc15; font-size: 14px; margin-bottom: 15px;">Đánh giá AI: Khuôn mặt có tính sát thương cực cao cho người nhìn!</p>
+      
+      <button class="btn-dodge" id="dodgeBtn" onmouseover="dodge()" onclick="dodge()">Không phục? Quét lại!</button>
+    </div>
   </div>
 
   <script>
-    function startTroll() {
-      const target = document.getElementById('target').value.trim();
-      if (!target) return alert('Nhập cái tên vào đã mày ơi!');
+    function startScan() {
+      const btn = document.getElementById('scan-btn');
+      const status = document.getElementById('status');
+      const scanner = document.getElementById('scanner-line');
+      const placeholder = document.getElementById('cam-placeholder');
+      
+      btn.style.display = 'none';
+      placeholder.innerText = 'Đang nhận diện ngũ quan...';
+      scanner.style.display = 'block';
 
-      const log = document.getElementById('log');
-      log.style.display = 'block';
-      log.innerHTML = '';
-
-      const steps = [
-        `[+] Đang kết nối tới máy chủ của ${target}...`,
-        `[+] Vượt tường lửa thành công (Bypass Firewall)...`,
-        `[+] Đang khai thác lỗ hổng Token GitHub...`,
-        `[+] Đang trích xuất tin nhắn messenger thầm kín...`,
-        `[+] Tải lên server 100%...`,
-        `[!] HOÀN TẤT DỮ LIỆU!`
+      const logs = [
+        'Đang đo tỉ lệ vàng gương mặt...',
+        'Phát hiện dung nhan lạ...',
+        'Hệ thống AI đang quá tải vì độ ảo...',
+        'Hoàn tất phân tích!'
       ];
 
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < steps.length) {
-          log.innerHTML += steps[i] + '<br>';
-          log.scrollTop = log.scrollHeight;
-          i++;
+      let step = 0;
+      const timer = setInterval(() => {
+        if (step < logs.length) {
+          status.innerText = logs[step];
+          step++;
         } else {
-          clearInterval(interval);
-          setTimeout(() => {
-            document.getElementById('troll-popup').style.display = 'flex';
-          }, 800);
+          clearInterval(timer);
+          scanner.style.display = 'none';
+          placeholder.innerText = 'Quét xong!';
+          status.style.display = 'none';
+          document.getElementById('result-area').style.display = 'block';
         }
-      }, 700);
+      }, 900);
+    }
+
+    function dodge() {
+      const btn = document.getElementById('dodgeBtn');
+      const x = Math.random() * (window.innerWidth - 150);
+      const y = Math.random() * (window.innerHeight - 50);
+      btn.style.left = `${x}px`;
+      btn.style.top = `${y}px`;
     }
   </script>
 </body>
