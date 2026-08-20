@@ -3,125 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vòng Quay May Mắn Tri Ân VIP</title>
+  <title>Kéo Nhân Vật</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body {
-      background: #111827;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 15px;
-      text-align: center;
-    }
-    h1 { color: #f59e0b; margin-bottom: 8px; font-size: 22px; }
-    p { color: #9ca3af; font-size: 14px; margin-bottom: 20px; }
-    .wheel-container {
+    body { margin: 0; background: #0d1117; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+    
+    /* Khu vực chơi */
+    #game-area {
+      width: 90vw; height: 80vh;
+      background: #161b22;
+      border: 2px dashed #30363d;
+      border-radius: 15px;
       position: relative;
-      width: 280px;
-      height: 280px;
-      margin-bottom: 25px;
+      touch-action: none; /* Quan trọng: để dùng cảm ứng mượt */
     }
-    .wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 6px solid #f59e0b;
-      background: conic-gradient(
-        #ef4444 0deg 60deg,
-        #3b82f6 60deg 120deg,
-        #10b981 120deg 180deg,
-        #f59e0b 180deg 240deg,
-        #8b5cf6 240deg 300deg,
-        #ec4899 300deg 360deg
-      );
-      transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-    }
-    .pointer {
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-top: 25px solid #fff;
-      z-index: 10;
-    }
-    button {
-      padding: 12px 30px;
-      background: #f59e0b;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 99;
-    }
-    .modal-content {
-      background: #1f2937;
-      border: 2px solid #ef4444;
-      padding: 25px;
+
+    /* Nhân vật */
+    #player {
+      width: 60px; height: 60px;
+      background: #58a6ff;
       border-radius: 12px;
-      max-width: 380px;
+      position: absolute;
+      top: 50%; left: 50%;
+      display: flex; justify-content: center; align-items: center;
+      cursor: grab;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      user-select: none;
     }
+    .eye { width: 10px; height: 10px; background: white; border-radius: 50%; margin: 0 5px; }
   </style>
 </head>
 <body>
 
-  <h1>🎁 VÒNG QUAY TRI ÂN KHÁCH HÀNG 🎁</h1>
-  <p>Mỗi tài khoản được 01 lượt quay miễn phí 100% trúng quà!</p>
-
-  <div class="wheel-container">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel"></div>
-  </div>
-
-  <button id="spinBtn" onclick="spin()">QUAY NGAY</button>
-
-  <div class="modal" id="trollModal">
-    <div class="modal-content">
-      <h2 style="color: #22c55e; margin-bottom: 10px;">🎉 CHÚC MỪNG BẠN!</h2>
-      <p style="color: #fff; font-size: 16px; margin-bottom: 15px;">Bạn đã trúng: <b>01 iPhone 16 Pro Max 1TB</b>!</p>
-      <div style="background: #111; padding: 12px; border-radius: 8px; color: #facc15; font-size: 13px; text-align: left; margin-bottom: 15px; line-height: 1.4;">
-        <b>Để nhận quà vui lòng:</b><br>
-        1. Bao toàn bộ tiền ăn vặt/trà sữa cho người gửi link này.<br>
-        2. Tự giác nhận mình đã bị lừa 100%.<br>
-        3. Không quạo dưới mọi hình thức! 🤣
-      </div>
-      <button onclick="location.reload()" style="background: #ef4444; color: #fff; width: 100%;">TÔI CHẤP NHẬN BỊ LỪA</button>
+  <div id="game-area">
+    <div id="player">
+      <div class="eye"></div>
+      <div class="eye"></div>
     </div>
   </div>
 
   <script>
-    let spun = false;
-    function spin() {
-      if (spun) return;
-      spun = true;
-      const wheel = document.getElementById('wheel');
-      const degrees = 1800 + Math.floor(Math.random() * 360);
-      wheel.style.transform = `rotate(${degrees}deg)`;
+    const player = document.getElementById('player');
+    const area = document.getElementById('game-area');
+    let isDragging = false;
+
+    // Hàm di chuyển (dùng chung cho chuột và tay)
+    function moveAt(pageX, pageY) {
+      const areaRect = area.getBoundingClientRect();
       
-      setTimeout(() => {
-        document.getElementById('trollModal').style.display = 'flex';
-      }, 4300);
+      // Tính vị trí so với khung game
+      let newX = pageX - areaRect.left - (player.offsetWidth / 2);
+      let newY = pageY - areaRect.top - (player.offsetHeight / 2);
+
+      // Giới hạn không cho nhân vật ra ngoài khung
+      const maxX = area.clientWidth - player.offsetWidth;
+      const maxY = area.clientHeight - player.offsetHeight;
+
+      newX = Math.max(0, Math.min(newX, maxX));
+      newY = Math.max(0, Math.min(newY, maxY));
+
+      player.style.left = newX + 'px';
+      player.style.top = newY + 'px';
     }
+
+    // Sự kiện Chuột
+    player.addEventListener('mousedown', () => isDragging = true);
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) moveAt(e.pageX, e.pageY);
+    });
+    document.addEventListener('mouseup', () => isDragging = false);
+
+    // Sự kiện Cảm ứng (cho điện thoại)
+    player.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      e.preventDefault(); // Tránh bị cuộn trang khi đang kéo
+    });
+    document.addEventListener('touchmove', (e) => {
+      if (isDragging) {
+        moveAt(e.touches[0].pageX, e.touches[0].pageY);
+      }
+    });
+    document.addEventListener('touchend', () => isDragging = false);
   </script>
 </body>
 </html>
-
