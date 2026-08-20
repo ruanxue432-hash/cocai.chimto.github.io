@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sự Kiện Nhận Quà Game Miễn Phí</title>
+  <title>FF MOD MENU VIP V9.9</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body {
-      background: #0f172a;
+      background: #0b0f19;
       color: #fff;
       display: flex;
       justify-content: center;
@@ -15,86 +15,190 @@
       min-height: 100vh;
       padding: 15px;
     }
-    .card {
-      background: #1e293b;
-      border: 2px solid #38bdf8;
-      border-radius: 12px;
+    .menu-box {
+      background: #111827;
+      border: 2px solid #ef4444;
+      border-radius: 14px;
       padding: 20px;
       width: 100%;
       max-width: 380px;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+    }
+    h2 {
+      color: #ef4444;
       text-align: center;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      font-size: 20px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    h2 { color: #f59e0b; margin-bottom: 10px; font-size: 20px; }
-    p { color: #94a3b8; font-size: 13px; margin-bottom: 15px; }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      background: #0f172a;
-      border: 1px solid #334155;
-      color: #fff;
-      border-radius: 6px;
-      outline: none;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
+    .status-tag {
       background: #22c55e;
       color: #000;
-      border: none;
-      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .feature-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1f2937;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      border-left: 3px solid #ef4444;
+    }
+    .feature-item span { font-size: 14px; font-weight: 500; }
+    
+    /* Nút gạt Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #374151;
+      transition: .3s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider { background-color: #ef4444; }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    .btn-inject {
+      width: 100%;
+      padding: 12px;
+      background: #ef4444;
+      color: #fff;
       font-weight: bold;
       font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 15px;
       cursor: pointer;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
     }
-    #troll-box {
+    .btn-inject:hover { background: #dc2626; }
+
+    /* Màn hình Log Terminal */
+    #log-box {
+      display: none;
+      background: #000;
+      color: #22c55e;
+      font-family: monospace;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 12px;
+      height: 120px;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    /* Popup Troll */
+    #troll-popup {
       display: none;
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.95);
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 20px;
       text-align: center;
-      z-index: 999;
+      padding: 20px;
+      z-index: 9999;
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h2>🎁 SỰ KIỆN TẶNG QUÀ VIP</h2>
-    <p>Nhập ID tài khoản để nhận 10.000 Kim Cương / 5.000 Robux miễn phí!</p>
-    
-    <select id="game">
-      <option>Free Fire (10.000 KC)</option>
-      <option>Roblox (5.000 Robux)</option>
-    </select>
-    <input type="text" id="userid" placeholder="Nhập ID hoặc Tên tài khoản...">
-    <button onclick="startGet()">NHẬN QUÀ NGAY</button>
+  <div class="menu-box">
+    <h2>🔥 FF MENU PRO VIP 🔥</h2>
+    <div style="text-align: center;"><span class="status-tag">STATUS: ANTI-BAN V2</span></div>
+
+    <div class="feature-item">
+      <span>🎯 Auto Headshot 1000000%</span>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="feature-item">
+      <span>👁️ ESP Tên / Vị trí / Máu</span>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="feature-item">
+      <span>👻 Tàng hình + Xuyên tường</span>
+      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+    </div>
+
+    <div class="feature-item">
+      <span>⚡ Tăng tốc độ chạy x1005</span>
+      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+    </div>
+
+    <div class="feature-item">
+      <span>💎 999999.999 Kim Cương Free</span>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+
+    <button class="btn-inject" onclick="injectHack()">KÍCH HOẠT HACK VÀO GAME</button>
+    <div id="log-box"></div>
   </div>
 
-  <div id="troll-box">
-    <h1 style="color: #ef4444; font-size: 26px; margin-bottom: 10px;">⚠️ NẠP THẤT BẠI!</h1>
-    <p style="color: #fff; font-size: 16px; margin-bottom: 10px;">Hệ thống phát hiện bạn đang có ý định "ăn chùa" quà game!</p>
-    <p style="color: #facc15; font-size: 20px; font-weight: bold; margin-bottom: 20px;">🤣 BẠN ĐÃ BỊ TROLL 100%!</p>
-    <button onclick="location.reload()" style="background: #38bdf8; color: #000; width: 200px;">Quay lại</button>
+  <div id="troll-popup">
+    <h1 style="color: #ef4444; font-size: 26px; margin-bottom: 12px;">🚫 CẢNH BÁO TỪ GARENA!</h1>
+    <p style="color: #fff; font-size: 16px; margin-bottom: 8px;">Phát hiện hành vi định dùng Menu Hack để gánh team!</p>
+    <p style="color: #facc15; font-size: 20px; font-weight: bold; margin-bottom: 20px;">🤣 TẬP BẮN TAY ĐI BẠN ƠI, BỊ TROLL RỒI!</p>
+    <button onclick="location.reload()" style="padding: 10px 24px; background: #38bdf8; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Chơi lại</button>
   </div>
 
   <script>
-    function startGet() {
-      const id = document.getElementById('userid').value.trim();
-      if (!id) return alert('Nhập ID vào đã mày ơi!');
-      
-      document.querySelector('.card').innerHTML = '<h3 style="color:#38bdf8;">Đang kết nối cổng nạp Garena/Roblox...</h3>';
-      
-      setTimeout(() => {
-        document.getElementById('troll-box').style.display = 'flex';
-      }, 1500);
+    function injectHack() {
+      const log = document.getElementById('log-box');
+      log.style.display = 'block';
+      log.innerHTML = '';
+
+      const steps = [
+        '[+] Đang hook vào tiến trình com.dts.freefireth...',
+        '[+] Bypass Anticheat Garena 2026...',
+        '[+] Nạp offset Auto Headshot & Aimlock...',
+        '[+] Chích 99.999 Kim Cương vào tài khoản...',
+        '[!] KÍCH HOẠT THÀNH CÔNG!'
+      ];
+
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < steps.length) {
+          log.innerHTML += steps[i] + '<br>';
+          log.scrollTop = log.scrollHeight;
+          i++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            document.getElementById('troll-popup').style.display = 'flex';
+          }, 800);
+        }
+      }, 700);
     }
   </script>
 </body>
 </html>
-
