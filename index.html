@@ -313,6 +313,18 @@
         .message-item .msg-content {
             color: #fff;
         }
+        .secret-info {
+            background: rgba(0, 255, 100, 0.05);
+            border: 1px solid rgba(0, 255, 100, 0.15);
+            border-radius: 12px;
+            padding: 8px 14px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .secret-info strong {
+            color: #69db7c;
+        }
         @media (max-width: 600px) {
             .container {
                 padding: 16px;
@@ -372,6 +384,10 @@
 
         <!-- Main -->
         <div id="mainContent" class="main-content">
+            <div class="secret-info">
+                🔑 <strong>Xác thực:</strong> Web chính gửi dữ liệu kèm secret để web trung gian nhận diện.
+            </div>
+
             <div class="input-group">
                 <input id="urlInput" placeholder="https://www.tiktok.com/@user/video/..." />
                 <button id="fetchBtn" class="btn btn-primary">🔍 Lấy video</button>
@@ -407,10 +423,11 @@
 
     <script>
         // ============================================================
-        //  👇 CẤU HÌNH GITHUB GIST (GIỐNG WEB TRUNG GIAN)
+        //  👇 CẤU HÌNH GITHUB GIST + SECRET KEY (GIỐNG WEB TRUNG GIAN)
         // ============================================================
         const GIST_ID = 'a5fc09ae4bbd3f069e2bb08a3102d5ba';
-        const GITHUB_TOKEN = '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'; // ← Dán token vào đây
+        const GITHUB_TOKEN = ' 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'; // ← Dán token vào đây
+        const SECRET_KEY = 'mySuperSecretKey123'; // ← Đổi thành key bí mật giống web trung gian
         // ============================================================
 
         const GIST_URL = `https://api.github.com/gists/${GIST_ID}`;
@@ -512,7 +529,7 @@
             location.reload();
         }
 
-        // ---- Sync ----
+        // ---- Sync (có gửi kèm secret) ----
         let cachedData = null;
 
         async function syncToGist() {
@@ -525,10 +542,12 @@
             const payload = {
                 users: users,
                 messages: cachedData?.messages || [],
-                lastUpdated: Date.now()
+                lastUpdated: Date.now(),
+                _secret: SECRET_KEY // ✅ Gửi kèm secret để web trung gian xác thực
             };
             await updateGist(payload);
             cachedData = payload;
+            showToast('☁️ Đã đồng bộ lên Gist');
         }
 
         async function fetchAndMerge() {
@@ -536,7 +555,7 @@
                 const data = await fetchGist();
                 cachedData = data;
                 if (!data.users) data.users = {};
-                if (!data.messages) data.messages = [];
+                if (!data.messages) data.messages = {};
 
                 const localUsers = getUsers();
                 let changed = false;
@@ -570,14 +589,12 @@
                 location.reload();
                 return;
             }
-            // Admin button
             const adminBtn = document.getElementById('adminLink');
             if (user.role === 'admin') {
                 adminBtn.style.display = 'inline-flex';
             } else {
                 adminBtn.style.display = 'none';
             }
-            // Inbox badge
             if (cachedData) {
                 const msgs = cachedData.messages.filter(m => m.to === session.username && m.status === 'unread');
                 const badge = document.getElementById('inboxBadge');
@@ -859,4 +876,4 @@
         });
     </script>
 </body>
-                </html>
+    </html>
