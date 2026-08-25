@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TikTok Downloader - Web chính</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: Arial, sans-serif;
             background: #0b0b1a;
@@ -23,7 +19,7 @@
         .container {
             max-width: 820px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.06);
             border-radius: 20px;
             padding: 30px;
             backdrop-filter: blur(10px);
@@ -36,23 +32,10 @@
             gap: 10px;
             margin-bottom: 20px;
         }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .logo span {
-            font-size: 32px;
-        }
-        h1 {
-            color: #ff0050;
-            font-size: 24px;
-        }
-        h1 small {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 14px;
-            font-weight: normal;
-        }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo span { font-size: 32px; }
+        h1 { color: #ff0050; font-size: 24px; }
+        h1 small { color: rgba(255,255,255,0.4); font-size: 14px; font-weight: normal; }
         .btn {
             padding: 8px 18px;
             border: none;
@@ -63,107 +46,47 @@
             transition: 0.3s;
             font-size: 14px;
         }
-        .btn-primary {
-            background: #ff0050;
-        }
-        .btn-primary:hover {
-            opacity: 0.8;
-        }
-        .btn-success {
-            background: #00c851;
-        }
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-        .btn-admin {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            display: none;
-        }
-        .hidden {
-            display: none !important;
-        }
+        .btn-primary { background: #ff0050; }
+        .btn-primary:hover { opacity: 0.8; }
+        .btn-success { background: #00c851; }
+        .btn-outline { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); }
+        .btn-outline:hover { background: rgba(255,255,255,0.15); }
+        .btn-admin { background: linear-gradient(135deg, #f093fb, #f5576c); display: none; }
+        .hidden { display: none !important; }
         input {
             width: 100%;
             padding: 12px 16px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.05);
             color: #fff;
             font-size: 15px;
             outline: none;
             margin-bottom: 10px;
         }
-        input:focus {
-            border-color: #ff0050;
-        }
-        .auth-box {
-            max-width: 400px;
-            margin: 30px auto;
-        }
-        .auth-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
+        input:focus { border-color: #ff0050; }
+        .auth-box { max-width: 400px; margin: 30px auto; }
+        .auth-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
         .auth-tab {
             flex: 1;
             padding: 10px;
             border: none;
             border-radius: 12px;
             background: transparent;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255,255,255,0.5);
             font-weight: 600;
             cursor: pointer;
         }
-        .auth-tab.active {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-        .auth-form {
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .auth-form.active {
-            display: flex;
-        }
-        .auth-error {
-            color: #ff6b6b;
-            font-size: 14px;
-            min-height: 20px;
-        }
-        .auth-success {
-            color: #69db7c;
-            font-size: 14px;
-            min-height: 20px;
-        }
-        .main-content {
-            display: none;
-        }
-        .main-content.show {
-            display: block;
-        }
-        .input-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .input-group input {
-            flex: 1;
-            min-width: 200px;
-            margin-bottom: 0;
-        }
-        .status {
-            min-height: 24px;
-            margin-bottom: 12px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-        }
+        .auth-tab.active { background: rgba(255,255,255,0.08); color: #fff; }
+        .auth-form { display: none; flex-direction: column; gap: 10px; }
+        .auth-form.active { display: flex; }
+        .auth-error { color: #ff6b6b; font-size: 14px; min-height: 20px; }
+        .auth-success { color: #69db7c; font-size: 14px; min-height: 20px; }
+        .main-content { display: none; }
+        .main-content.show { display: block; }
+        .input-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+        .input-group input { flex: 1; min-width: 200px; margin-bottom: 0; }
+        .status { min-height: 24px; margin-bottom: 12px; font-size: 14px; color: rgba(255,255,255,0.6); }
         .video-wrapper {
             display: none;
             border-radius: 16px;
@@ -171,59 +94,31 @@
             background: #000;
             margin-top: 12px;
         }
-        .video-wrapper video {
-            width: 100%;
-            display: block;
-            aspect-ratio: 9/16;
-        }
-        .video-wrapper.show {
-            display: block;
-        }
-        .video-info {
-            display: none;
-            padding: 12px 0 8px;
-        }
-        .video-info.show {
-            display: block;
-        }
-        .video-info .title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .video-info .author {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-        }
-        .actions {
-            display: none;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-        .actions.show {
-            display: flex;
-        }
-        .actions .btn {
-            flex: 1;
-            min-width: 120px;
-            text-align: center;
-        }
+        .video-wrapper video { width: 100%; display: block; aspect-ratio: 9/16; }
+        .video-wrapper.show { display: block; }
+        .video-info { display: none; padding: 12px 0 8px; }
+        .video-info.show { display: block; }
+        .video-info .title { font-size: 18px; font-weight: 600; }
+        .video-info .author { color: rgba(255,255,255,0.5); font-size: 14px; }
+        .actions { display: none; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .actions.show { display: flex; }
+        .actions .btn { flex: 1; min-width: 120px; text-align: center; }
         .footer {
             margin-top: 24px;
             padding-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255,255,255,0.06);
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.25);
+            color: rgba(255,255,255,0.25);
         }
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0,0,0,0.85);
             color: #fff;
             padding: 12px 28px;
             border-radius: 40px;
@@ -233,12 +128,10 @@
             transition: 0.3s;
             pointer-events: none;
         }
-        .toast.show {
-            opacity: 1;
-        }
+        .toast.show { opacity: 1; }
         .btn-inbox {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
             position: relative;
             display: none;
         }
@@ -261,16 +154,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
             padding: 20px;
         }
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
         .modal {
             background: #1a1a2e;
             border-radius: 20px;
@@ -280,68 +171,40 @@
             padding: 24px;
             overflow-y: auto;
         }
-        .modal h2 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 24px;
-            cursor: pointer;
-        }
+        .modal h2 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-close { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 24px; cursor: pointer; }
         .message-item {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             border-radius: 12px;
             padding: 12px 16px;
             margin-bottom: 10px;
             border-left: 3px solid transparent;
         }
-        .message-item.unread {
-            border-left-color: #ff0050;
-        }
+        .message-item.unread { border-left-color: #ff0050; }
         .message-item .msg-header {
             display: flex;
             justify-content: space-between;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255,255,255,0.5);
             font-size: 13px;
             margin-bottom: 4px;
         }
-        .message-item .msg-content {
-            color: #fff;
-        }
+        .message-item .msg-content { color: #fff; }
         .secret-info {
-            background: rgba(0, 255, 100, 0.05);
-            border: 1px solid rgba(0, 255, 100, 0.15);
+            background: rgba(0,255,100,0.05);
+            border: 1px solid rgba(0,255,100,0.15);
             border-radius: 12px;
             padding: 8px 14px;
             margin-bottom: 16px;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255,255,255,0.5);
         }
-        .secret-info strong {
-            color: #69db7c;
-        }
+        .secret-info strong { color: #69db7c; }
         @media (max-width: 600px) {
-            .container {
-                padding: 16px;
-            }
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .input-group {
-                flex-direction: column;
-            }
-            .input-group input {
-                min-width: unset;
-            }
-            .actions .btn {
-                min-width: 100%;
-            }
+            .container { padding: 16px; }
+            .header { flex-direction: column; align-items: stretch; }
+            .input-group { flex-direction: column; }
+            .input-group input { min-width: unset; }
+            .actions .btn { min-width: 100%; }
         }
     </style>
 </head>
@@ -360,7 +223,6 @@
             </div>
         </div>
 
-        <!-- Auth -->
         <div id="authSection" class="auth-box">
             <div class="auth-tabs">
                 <button class="auth-tab active" data-tab="login">Đăng nhập</button>
@@ -382,12 +244,10 @@
             </form>
         </div>
 
-        <!-- Main -->
         <div id="mainContent" class="main-content">
             <div class="secret-info">
                 🔑 <strong>Xác thực:</strong> Web chính gửi dữ liệu kèm secret để web trung gian nhận diện.
             </div>
-
             <div class="input-group">
                 <input id="urlInput" placeholder="https://www.tiktok.com/@user/video/..." />
                 <button id="fetchBtn" class="btn btn-primary">🔍 Lấy video</button>
@@ -411,7 +271,6 @@
         </div>
     </div>
 
-    <!-- Inbox Modal -->
     <div class="modal-overlay" id="inboxModal">
         <div class="modal">
             <h2><span>📩 Hộp thư</span><button class="modal-close" id="closeInbox">&times;</button></h2>
@@ -423,10 +282,10 @@
 
     <script>
         // ============================================================
-        //  👇 CẤU HÌNH GITHUB GIST + SECRET KEY (GIỐNG WEB TRUNG GIAN)
+        //  👇 CẤU HÌNH (THAY TOKEN CỦA BẠN)
         // ============================================================
         const GIST_ID = 'a5fc09ae4bbd3f069e2bb08a3102d5ba';
-        const GITHUB_TOKEN = ' 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'; // ← Dán token vào đây
+        const GITHUB_TOKEN = ' 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'; // ← Dán token GitHub vào đây
         const SECRET_KEY = 'mySuperSecretKey123'; // ← Đổi thành key bí mật giống web trung gian
         // ============================================================
 
@@ -439,7 +298,6 @@
         const ADMIN_USERNAME = 'admin';
         const ADMIN_PASSWORD = 'admin123';
 
-        // ---- Storage ----
         const USERS_KEY = 'tiktok_users';
         const SESSION_KEY = 'tiktok_session';
 
@@ -447,25 +305,20 @@
             const data = localStorage.getItem(USERS_KEY);
             return data ? JSON.parse(data) : {};
         }
-
         function saveUsers(users) {
             localStorage.setItem(USERS_KEY, JSON.stringify(users));
         }
-
         function getSession() {
             const data = localStorage.getItem(SESSION_KEY);
             return data ? JSON.parse(data) : null;
         }
-
         function setSession(s) {
             localStorage.setItem(SESSION_KEY, JSON.stringify(s));
         }
-
         function clearSession() {
             localStorage.removeItem(SESSION_KEY);
         }
 
-        // ---- Gist API ----
         async function fetchGist() {
             const res = await fetch(GIST_URL, { headers: HEADERS });
             if (!res.ok) {
@@ -497,7 +350,6 @@
             return true;
         }
 
-        // ---- Auth ----
         function registerUser(username, password, confirm) {
             if (password !== confirm) return { ok: false, msg: 'Mật khẩu không khớp.' };
             if (password.length < 4) return { ok: false, msg: 'Mật khẩu >= 4 ký tự.' };
@@ -529,7 +381,6 @@
             location.reload();
         }
 
-        // ---- Sync (có gửi kèm secret) ----
         let cachedData = null;
 
         async function syncToGist() {
@@ -543,7 +394,7 @@
                 users: users,
                 messages: cachedData?.messages || [],
                 lastUpdated: Date.now(),
-                _secret: SECRET_KEY // ✅ Gửi kèm secret để web trung gian xác thực
+                _secret: SECRET_KEY
             };
             await updateGist(payload);
             cachedData = payload;
@@ -555,7 +406,7 @@
                 const data = await fetchGist();
                 cachedData = data;
                 if (!data.users) data.users = {};
-                if (!data.messages) data.messages = {};
+                if (!data.messages) data.messages = [];
 
                 const localUsers = getUsers();
                 let changed = false;
@@ -578,7 +429,6 @@
             }
         }
 
-        // ---- UI ----
         function updateUI() {
             const session = getSession();
             if (!session) return;
@@ -614,7 +464,6 @@
             }
         }
 
-        // ---- Inbox ----
         async function renderInbox() {
             const session = getSession();
             if (!session || !cachedData) return;
@@ -674,7 +523,6 @@
             }
         };
 
-        // ---- Toast ----
         function showToast(msg, isError = false) {
             const el = document.getElementById('toast');
             el.textContent = msg;
@@ -684,7 +532,6 @@
             el._timeout = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
-        // ---- Video ----
         let currentVideoUrl = null;
 
         async function fetchTikTok(url) {
@@ -719,7 +566,6 @@
             }
         }
 
-        // ---- DOM Events ----
         document.addEventListener('DOMContentLoaded', function() {
             const session = getSession();
             if (session) {
@@ -733,7 +579,6 @@
                 });
             }
 
-            // Auth tabs
             document.querySelectorAll('.auth-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -747,7 +592,6 @@
                 });
             });
 
-            // Login
             document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('loginUser').value.trim();
@@ -766,7 +610,6 @@
                 }
             });
 
-            // Register
             document.getElementById('registerForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('regUser').value.trim();
@@ -790,10 +633,8 @@
                 }
             });
 
-            // Logout
             document.getElementById('logoutBtn').addEventListener('click', logoutUser);
 
-            // Inbox
             document.getElementById('inboxBtn').addEventListener('click', function() {
                 document.getElementById('inboxModal').classList.add('active');
                 renderInbox();
@@ -805,7 +646,6 @@
                 if (e.target === this) this.classList.remove('active');
             });
 
-            // Fetch video
             document.getElementById('fetchBtn').addEventListener('click', function() {
                 const url = document.getElementById('urlInput').value.trim();
                 if (!url) {
@@ -819,7 +659,6 @@
                 if (e.key === 'Enter') document.getElementById('fetchBtn').click();
             });
 
-            // Download
             document.getElementById('downloadBtn').addEventListener('click', async function() {
                 if (!currentVideoUrl) {
                     showToast('⚠️ Chưa có video', true);
@@ -847,7 +686,6 @@
                 }
             });
 
-            // Copy
             document.getElementById('copyBtn').addEventListener('click', function() {
                 const link = document.getElementById('urlInput').value.trim();
                 if (!link) { showToast('⚠️ Không có link', true); return; }
@@ -860,9 +698,7 @@
                     });
             });
 
-            // ---- Polling ----
             let pollInterval = null;
-
             function startPolling() {
                 if (pollInterval) clearInterval(pollInterval);
                 pollInterval = setInterval(async () => {
@@ -876,4 +712,4 @@
         });
     </script>
 </body>
-    </html>
+                </html>
