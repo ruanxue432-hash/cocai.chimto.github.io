@@ -1,1253 +1,912 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video/Audio Editor Pro - TikTok & Bilibili</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: #0b0b1a;
-            color: #fff;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(24px);
-            border-radius: 32px;
-            padding: 30px 24px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
-        }
-        h1 {
-            font-size: 28px;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        h1 span {
-            background: linear-gradient(135deg, #ff0050, #00f2ea);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .sub {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 8px;
-            flex-wrap: wrap;
-        }
-        .tab {
-            padding: 8px 20px;
-            border-radius: 30px;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.5);
-            border: none;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .tab.active {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-        .tab-content {
-            display: none;
-            animation: fadeUp 0.3s ease;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 12px;
-            align-items: center;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.3s;
-            color: #fff;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #ff0050, #d4006e);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255, 0, 80, 0.3);
-        }
-        .btn-success {
-            background: #00c851;
-        }
-        .btn-success:hover {
-            transform: translateY(-2px);
-        }
-        .btn-warning {
-            background: #f57c00;
-        }
-        .btn-warning:hover {
-            transform: translateY(-2px);
-        }
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-        .btn-danger {
-            background: #ff1744;
-        }
-        .btn-danger:hover {
-            transform: translateY(-2px);
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 13px;
-        }
-        .file-input-wrap {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-        .file-input-wrap input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        input[type="text"],
-        input[type="number"],
-        select {
-            padding: 10px 16px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            flex: 1;
-            min-width: 150px;
-        }
-        input:focus,
-        select:focus {
-            border-color: #ff0050;
-        }
-        .video-container {
-            position: relative;
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
-            aspect-ratio: 16 / 9;
-            max-height: 60vh;
-            margin-bottom: 12px;
-        }
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .video-container canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        .video-container canvas.active {
-            pointer-events: auto;
-        }
-        .slider-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 20px;
-            background: rgba(255, 255, 255, 0.04);
-            padding: 12px 16px;
-            border-radius: 16px;
-            margin: 8px 0;
-            align-items: center;
-        }
-        .slider-group label {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .slider-group input[type="range"] {
-            width: 120px;
-            accent-color: #ff0050;
-            background: transparent;
-        }
-        .slider-group input[type="number"] {
-            width: 60px;
-            padding: 4px 8px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            font-size: 14px;
-            text-align: center;
-        }
-        .timeline {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            padding: 16px;
-            margin: 12px 0;
-        }
-        .timeline-track {
-            position: relative;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            cursor: pointer;
-            overflow: hidden;
-        }
-        .timeline-track .playhead {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 2px;
-            height: 100%;
-            background: #ff0050;
-            z-index: 5;
-            transition: left 0.05s linear;
-        }
-        .timeline-track .keyframe {
-            position: absolute;
-            top: 0;
-            width: 6px;
-            height: 100%;
-            background: #00f2ea;
-            z-index: 4;
-            cursor: ew-resize;
-        }
-        .keyframe-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            margin-top: 12px;
-        }
-        .result-box {
-            display: none;
-            margin-top: 16px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-        }
-        .result-box.show {
-            display: block;
-        }
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-size: 14px;
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .toast.show {
-            opacity: 1;
-        }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            padding: 10px 0;
-        }
-        .info-grid .item {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        .info-grid .item strong {
-            color: #fff;
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 16px;
-            }
-            .row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .btn {
-                justify-content: center;
-            }
-            .slider-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .slider-group label {
-                justify-content: space-between;
-            }
-            .slider-group input[type="range"] {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siêu Công Cụ - Video, Audio, EXE Converter</title>
+  <style>
+    /* ---- RESET & BASE ---- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0b0b1a;
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(24px);
+      border-radius: 32px;
+      padding: 30px 24px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    }
+    h1 { font-size: 28px; margin-bottom: 4px; display: flex; align-items: center; gap: 12px; }
+    h1 span { background: linear-gradient(135deg, #ff0050, #00f2ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .sub { color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 24px; }
+    .tabs {
+      display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 8px; flex-wrap: wrap;
+    }
+    .tab {
+      padding: 8px 20px; border-radius: 30px; background: transparent; color: rgba(255,255,255,0.5);
+      border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s;
+    }
+    .tab.active { background: rgba(255,255,255,0.08); color: #fff; }
+    .tab-content { display: none; animation: fadeUp 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ---- COMPONENTS ---- */
+    .row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; align-items: center; }
+    .btn {
+      padding: 10px 20px; border: none; border-radius: 30px; font-weight: 600; font-size: 14px;
+      cursor: pointer; transition: 0.3s; color: #fff; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-primary { background: linear-gradient(135deg, #ff0050, #d4006e); box-shadow: 0 8px 24px rgba(255,0,80,0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,0,80,0.4); }
+    .btn-success { background: #00c851; }
+    .btn-success:hover { transform: translateY(-2px); }
+    .btn-warning { background: #f57c00; }
+    .btn-warning:hover { transform: translateY(-2px); }
+    .btn-outline { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); }
+    .btn-outline:hover { background: rgba(255,255,255,0.15); }
+    .btn-danger { background: #ff1744; }
+    .btn-danger:hover { transform: translateY(-2px); }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+    .file-input-wrap { position: relative; overflow: hidden; display: inline-block; }
+    .file-input-wrap input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+
+    input[type="text"], input[type="number"], select, textarea {
+      padding: 10px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05); color: #fff; font-size: 14px; outline: none; flex: 1; min-width: 150px;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #ff0050; }
+
+    .video-container { position: relative; background: #000; border-radius: 20px; overflow: hidden; aspect-ratio: 16/9; max-height: 60vh; margin-bottom: 12px; }
+    .video-container video { width: 100%; height: 100%; object-fit: contain; }
+    .video-container canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    .video-container canvas.active { pointer-events: auto; }
+
+    .slider-group {
+      display: flex; flex-wrap: wrap; gap: 12px 20px; background: rgba(255,255,255,0.04);
+      padding: 12px 16px; border-radius: 16px; margin: 8px 0; align-items: center;
+    }
+    .slider-group label { font-size: 13px; color: rgba(255,255,255,0.6); display: flex; align-items: center; gap: 8px; }
+    .slider-group input[type="range"] { width: 120px; accent-color: #ff0050; background: transparent; }
+    .slider-group input[type="number"] { width: 60px; padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: #fff; font-size: 14px; text-align: center; }
+
+    .timeline { background: rgba(255,255,255,0.04); border-radius: 16px; padding: 16px; margin: 12px 0; }
+    .timeline-track { position: relative; height: 60px; background: rgba(255,255,255,0.06); border-radius: 12px; cursor: pointer; overflow: hidden; }
+    .timeline-track .playhead { position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: #ff0050; z-index: 5; transition: left 0.05s linear; }
+    .timeline-track .keyframe { position: absolute; top: 0; width: 6px; height: 100%; background: #00f2ea; z-index: 4; cursor: ew-resize; }
+    .timeline-track .keyframe-label { position: absolute; bottom: -20px; font-size: 10px; color: #00f2ea; transform: translateX(-50%); }
+
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; padding: 10px 0; }
+    .info-grid .item { background: rgba(255,255,255,0.04); padding: 8px 12px; border-radius: 12px; font-size: 13px; color: rgba(255,255,255,0.6); }
+    .info-grid .item strong { color: #fff; }
+
+    .result-box { display: none; margin-top: 16px; padding: 16px; background: rgba(255,255,255,0.04); border-radius: 16px; }
+    .result-box.show { display: block; }
+
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 12px 28px; border-radius: 40px; font-size: 14px; backdrop-filter: blur(10px); z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+
+    .code-block { background: #1e1e2f; padding: 16px; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 13px; overflow-x: auto; white-space: pre-wrap; color: #a9b7c6; max-height: 400px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.06); }
+
+    @media (max-width: 600px) {
+      .container { padding: 16px; }
+      .row { flex-direction: column; align-items: stretch; }
+      .btn { justify-content: center; }
+      .slider-group { flex-direction: column; align-items: stretch; }
+      .slider-group label { justify-content: space-between; }
+      .slider-group input[type="range"] { width: 100%; }
+    }
+  </style>
 </head>
 <body>
+<div class="container">
+  <h1>⚡ <span>Siêu Công Cụ Pro</span></h1>
+  <div class="sub">Tải video • Chỉnh sửa • Âm thanh • Chuyển đổi EXE → Code</div>
 
-    <div class="container">
-        <h1>🎬 <span>Video/Audio Editor Pro</span></h1>
-        <div class="sub">Tải video TikTok/Bilibili không logo + Chỉnh sửa video/ảnh + Tách giọng + Keyframe âm lượng</div>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="downloader">📥 Tải video</button>
+    <button class="tab" data-tab="editor">✂️ Chỉnh sửa</button>
+    <button class="tab" data-tab="audio">🎵 Âm thanh</button>
+    <button class="tab" data-tab="exe">🔄 EXE → Code</button>
+  </div>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab active" data-tab="downloader">📥 Tải video</button>
-            <button class="tab" data-tab="editor">✂️ Chỉnh sửa</button>
-            <button class="tab" data-tab="audio">🎵 Âm thanh</button>
-        </div>
+  <!-- ============================================================ -->
+  <!-- TAB 1: DOWNLOADER -->
+  <!-- ============================================================ -->
+  <div id="tab-downloader" class="tab-content active">
+    <div class="row">
+      <input type="text" id="urlInput" placeholder="Dán link TikTok hoặc Bilibili..." style="flex:2;" />
+      <button id="fetchBtn" class="btn btn-primary">🔍 Lấy thông tin</button>
+    </div>
+    <div id="downloadResult" class="result-box">
+      <div class="info-grid">
+        <div class="item"><strong>Tiêu đề:</strong> <span id="dlTitle">-</span></div>
+        <div class="item"><strong>Tác giả:</strong> <span id="dlAuthor">-</span></div>
+        <div class="item"><strong>Nền tảng:</strong> <span id="dlPlatform">-</span></div>
+      </div>
+      <div id="dlThumb" style="margin:8px 0;max-height:200px;overflow:hidden;border-radius:12px;">
+        <img id="dlThumbImg" src="" alt="thumbnail" style="width:100%;max-height:200px;object-fit:cover;" />
+      </div>
+      <div class="row" id="dlActions">
+        <button class="btn btn-success btn-sm" data-quality="normal">⬇️ Video (không logo)</button>
+        <button class="btn btn-warning btn-sm" data-quality="hd">⬇️ HD</button>
+        <button class="btn btn-outline btn-sm" data-quality="mp3">🎵 MP3</button>
+        <button class="btn btn-outline btn-sm" id="copyCaptionBtn">📋 Copy caption</button>
+      </div>
+    </div>
+  </div>
 
-        <!-- Tab 1: Downloader -->
-        <div id="tab-downloader" class="tab-content active">
-            <div class="row">
-                <input type="text" id="urlInput" placeholder="Dán link TikTok hoặc Bilibili..." style="flex:2;" />
-                <button id="fetchBtn" class="btn btn-primary">🔍 Lấy thông tin</button>
-            </div>
-            <div id="downloadResult" class="result-box">
-                <div class="info-grid">
-                    <div class="item"><strong>Tiêu đề:</strong> <span id="dlTitle">-</span></div>
-                    <div class="item"><strong>Tác giả:</strong> <span id="dlAuthor">-</span></div>
-                    <div class="item"><strong>Nền tảng:</strong> <span id="dlPlatform">-</span></div>
-                </div>
-                <div id="dlThumb" style="margin:8px 0;max-height:200px;overflow:hidden;border-radius:12px;">
-                    <img id="dlThumbImg" src="" alt="thumbnail" style="width:100%;max-height:200px;object-fit:cover;" />
-                </div>
-                <div class="row" id="dlActions">
-                    <button class="btn btn-success btn-sm" data-quality="normal">⬇️ Video (không logo)</button>
-                    <button class="btn btn-warning btn-sm" data-quality="hd">⬇️ HD</button>
-                    <button class="btn btn-outline btn-sm" data-quality="mp3">🎵 MP3</button>
-                    <button class="btn btn-outline btn-sm" id="copyCaptionBtn">📋 Copy caption</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab 2: Editor -->
-        <div id="tab-editor" class="tab-content">
-            <div class="video-container" id="editorArea">
-                <video id="videoPlayer" src="" crossorigin="anonymous" playsinline></video>
-                <canvas id="canvasOverlay"></canvas>
-            </div>
-            <div class="row">
-                <label class="file-input-wrap">
-                    <span class="btn btn-primary btn-sm">📂 Mở video</span>
-                    <input type="file" id="videoInput" accept="video/*" />
-                </label>
-                <label class="file-input-wrap">
-                    <span class="btn btn-outline btn-sm">🖼️ Thêm ảnh</span>
-                    <input type="file" id="imageInput" accept="image/*" />
-                </label>
-                <button id="resetImagesBtn" class="btn btn-danger btn-sm">🗑️ Xóa ảnh</button>
-                <button id="newProjectBtn" class="btn btn-warning btn-sm">📁 Dự án mới</button>
-                <button id="exportBtn" class="btn btn-success btn-sm">💾 Xuất ảnh</button>
-            </div>
-
-            <div class="slider-group">
-                <label>⏱️ Cắt từ <input type="number" id="cutStart" value="0" step="0.1" />s</label>
-                <label>đến <input type="number" id="cutEnd" value="10" step="0.1" />s</label>
-                <button id="applyCutBtn" class="btn btn-primary btn-sm">✂️ Cắt</button>
-            </div>
-
-            <div class="slider-group">
-                <label>🔄 Xoay <input type="range" id="rotateSlider" min="0" max="360" value="0" /></label>
-                <label>Lật <select id="flipSelect"><option value="none">Không</option><option value="horizontal">Ngang</option><option value="vertical">Dọc</option></select></label>
-                <label>☀️ Sáng <input type="range" id="brightnessSlider" min="0" max="200" value="100" /></label>
-                <label>🎨 Tương phản <input type="range" id="contrastSlider" min="0" max="200" value="100" /></label>
-            </div>
-
-            <div class="slider-group">
-                <label>🔵 Tách nền</label>
-                <button id="enableCircleBtn" class="btn btn-warning btn-sm">⭕ Bật</button>
-                <button id="applyCircleBtn" class="btn btn-success btn-sm">✅ Áp dụng</button>
-                <button id="disableCircleBtn" class="btn btn-danger btn-sm">❌ Tắt</button>
-                <label>Size <input type="range" id="circleSize" min="10" max="300" value="100" /></label>
-                <label>X <input type="range" id="circleX" min="0" max="100" value="50" /></label>
-                <label>Y <input type="range" id="circleY" min="0" max="100" value="50" /></label>
-                <label>Chế độ <select id="circleMode"><option value="outside">Xóa ngoài</option><option value="inside">Xóa trong</option></select></label>
-            </div>
-
-            <div class="info-grid" style="margin-top:8px;">
-                <div class="item">📁 Dự án: <span id="projectName">Chưa có</span></div>
-                <div class="item">🖼️ Ảnh: <span id="imageCount">0</span></div>
-                <div class="item">🎬 Video: <span id="videoStatus">Chưa tải</span></div>
-            </div>
-        </div>
-
-        <!-- Tab 3: Audio -->
-        <div id="tab-audio" class="tab-content">
-            <div class="row">
-                <label class="file-input-wrap">
-                    <span class="btn btn-primary btn-sm">🎵 Tải video/audio</span>
-                    <input type="file" id="audioFileInput" accept="video/*,audio/*" />
-                </label>
-                <button id="extractVocalBtn" class="btn btn-warning btn-sm">🎤 Tách giọng (vocal)</button>
-                <button id="replaceVoiceBtn" class="btn btn-success btn-sm">🗣️ Thay giọng</button>
-                <button id="syncAudioBtn" class="btn btn-outline btn-sm">🔄 Đồng bộ</button>
-            </div>
-
-            <div class="slider-group">
-                <label>⏳ Delay (ms) <input type="range" id="delaySlider" min="-1000" max="1000" value="0" /></label>
-                <label><input type="number" id="delayValue" value="0" step="10" /> ms</label>
-            </div>
-
-            <div class="timeline">
-                <div class="timeline-track" id="timelineTrack">
-                    <div class="playhead" id="playhead" style="left:0%;"></div>
-                    <!-- Keyframes sẽ được thêm động -->
-                </div>
-                <div class="keyframe-controls">
-                    <button id="addKeyframeBtn" class="btn btn-outline btn-sm">➕ Thêm keyframe</button>
-                    <button id="clearKeyframesBtn" class="btn btn-danger btn-sm">🗑️ Xóa tất cả</button>
-                    <span style="font-size:13px;color:rgba(255,255,255,0.4);">Âm lượng: <span id="volumeDisplay">100</span>%</span>
-                </div>
-            </div>
-
-            <div class="info-grid">
-                <div class="item">🎵 Audio: <span id="audioStatus">Chưa tải</span></div>
-                <div class="item">🎤 Vocal: <span id="vocalStatus">Chưa tách</span></div>
-                <div class="item">🔊 Keyframes: <span id="keyframeCount">0</span></div>
-            </div>
-
-            <div class="row" style="margin-top:12px;">
-                <button id="playAudioBtn" class="btn btn-success btn-sm">▶️ Phát</button>
-                <button id="pauseAudioBtn" class="btn btn-outline btn-sm">⏸️ Tạm dừng</button>
-                <button id="stopAudioBtn" class="btn btn-danger btn-sm">⏹️ Dừng</button>
-                <label class="file-input-wrap">
-                    <span class="btn btn-outline btn-sm">📥 Nhập giọng thay thế</span>
-                    <input type="file" id="replaceVoiceInput" accept="audio/*" />
-                </label>
-            </div>
-        </div>
-
+  <!-- ============================================================ -->
+  <!-- TAB 2: EDITOR -->
+  <!-- ============================================================ -->
+  <div id="tab-editor" class="tab-content">
+    <div class="video-container" id="editorArea">
+      <video id="videoPlayer" src="" crossorigin="anonymous" playsinline></video>
+      <canvas id="canvasOverlay"></canvas>
+    </div>
+    <div class="row">
+      <label class="file-input-wrap"><span class="btn btn-primary btn-sm">📂 Mở video</span><input type="file" id="videoInput" accept="video/*" /></label>
+      <label class="file-input-wrap"><span class="btn btn-outline btn-sm">🖼️ Thêm ảnh</span><input type="file" id="imageInput" accept="image/*" /></label>
+      <button id="resetImagesBtn" class="btn btn-danger btn-sm">🗑️ Xóa ảnh</button>
+      <button id="newProjectBtn" class="btn btn-warning btn-sm">📁 Dự án mới</button>
+      <button id="exportBtn" class="btn btn-success btn-sm">💾 Xuất ảnh</button>
     </div>
 
-    <div id="toast" class="toast"></div>
+    <div class="slider-group">
+      <label>⏱️ Cắt từ <input type="number" id="cutStart" value="0" step="0.1" />s</label>
+      <label>đến <input type="number" id="cutEnd" value="10" step="0.1" />s</label>
+      <button id="applyCutBtn" class="btn btn-primary btn-sm">✂️ Cắt</button>
+    </div>
 
-    <!-- ========================================================== -->
-    <!-- JavaScript -->
-    <!-- ========================================================== -->
-    <script>
-        // ============================================================
-        //  TOAST
-        // ============================================================
-        function showToast(msg, isError = false) {
-            const el = document.getElementById('toast');
-            el.textContent = msg;
-            el.style.background = isError ? 'rgba(200,50,50,0.9)' : 'rgba(0,0,0,0.85)';
-            el.classList.add('show');
-            clearTimeout(el._timeout);
-            el._timeout = setTimeout(() => el.classList.remove('show'), 3000);
-        }
+    <div class="slider-group">
+      <label>🔄 Xoay <input type="range" id="rotateSlider" min="0" max="360" value="0" /></label>
+      <label>Lật <select id="flipSelect"><option value="none">Không</option><option value="horizontal">Ngang</option><option value="vertical">Dọc</option></select></label>
+      <label>☀️ Sáng <input type="range" id="brightnessSlider" min="0" max="200" value="100" /></label>
+      <label>🎨 Tương phản <input type="range" id="contrastSlider" min="0" max="200" value="100" /></label>
+    </div>
 
-        // ============================================================
-        //  TABS
-        // ============================================================
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                const target = this.dataset.tab;
-                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-                document.getElementById('tab-' + target).classList.add('active');
-            });
-        });
+    <div class="slider-group">
+      <label>🔵 Tách nền</label>
+      <button id="enableCircleBtn" class="btn btn-warning btn-sm">⭕ Bật</button>
+      <button id="applyCircleBtn" class="btn btn-success btn-sm">✅ Áp dụng</button>
+      <button id="disableCircleBtn" class="btn btn-danger btn-sm">❌ Tắt</button>
+      <label>Size <input type="range" id="circleSize" min="10" max="300" value="100" /></label>
+      <label>X <input type="range" id="circleX" min="0" max="100" value="50" /></label>
+      <label>Y <input type="range" id="circleY" min="0" max="100" value="50" /></label>
+      <label>Chế độ <select id="circleMode"><option value="outside">Xóa ngoài</option><option value="inside">Xóa trong</option></select></label>
+    </div>
 
-        // ============================================================
-        //  PART 1: DOWNLOADER (TikTok & Bilibili)
-        // ============================================================
-        const urlInput = document.getElementById('urlInput');
-        const fetchBtn = document.getElementById('fetchBtn');
-        const downloadResult = document.getElementById('downloadResult');
-        const dlTitle = document.getElementById('dlTitle');
-        const dlAuthor = document.getElementById('dlAuthor');
-        const dlPlatform = document.getElementById('dlPlatform');
-        const dlThumbImg = document.getElementById('dlThumbImg');
-        const dlActions = document.getElementById('dlActions');
-        const copyCaptionBtn = document.getElementById('copyCaptionBtn');
+    <div class="info-grid">
+      <div class="item">📁 Dự án: <span id="projectName">Chưa có</span></div>
+      <div class="item">🖼️ Ảnh: <span id="imageCount">0</span></div>
+      <div class="item">🎬 Video: <span id="videoStatus">Chưa tải</span></div>
+    </div>
+  </div>
 
-        let currentDownloadData = null;
+  <!-- ============================================================ -->
+  <!-- TAB 3: AUDIO -->
+  <!-- ============================================================ -->
+  <div id="tab-audio" class="tab-content">
+    <div class="row">
+      <label class="file-input-wrap"><span class="btn btn-primary btn-sm">🎵 Tải video/audio</span><input type="file" id="audioFileInput" accept="video/*,audio/*" /></label>
+      <button id="extractVocalBtn" class="btn btn-warning btn-sm">🎤 Tách giọng</button>
+      <button id="replaceVoiceBtn" class="btn btn-success btn-sm">🗣️ Thay giọng</button>
+      <button id="syncAudioBtn" class="btn btn-outline btn-sm">🔄 Đồng bộ</button>
+    </div>
 
-        function detectPlatform(url) {
-            if (url.includes('tiktok.com') || url.includes('vm.tiktok.com')) return 'tiktok';
-            if (url.includes('bilibili.com') || url.includes('b23.tv')) return 'bilibili';
-            return null;
-        }
+    <div class="slider-group">
+      <label>⏳ Delay (ms) <input type="range" id="delaySlider" min="-1000" max="1000" value="0" /></label>
+      <label><input type="number" id="delayValue" value="0" step="10" /> ms</label>
+    </div>
 
-        async function fetchTikTok(url) {
-            const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`;
-            const res = await fetch(apiUrl);
-            if (!res.ok) throw new Error('Lỗi API TikTok');
-            const data = await res.json();
-            if (data.code !== 0 || !data.data) throw new Error(data.msg || 'Không tìm thấy video');
-            const d = data.data;
-            return {
-                title: d.title || 'Video TikTok',
-                author: d.author?.unique_id || d.author?.nickname || 'unknown',
-                thumbnail: d.cover || '',
-                videoNoWatermark: d.play || d.wmplay || '',
-                videoHD: d.hdplay || d.play || '',
-                audio: d.music || '',
-                platform: 'tiktok',
-                caption: d.title || ''
-            };
-        }
+    <div class="timeline">
+      <div class="timeline-track" id="timelineTrack">
+        <div class="playhead" id="playhead" style="left:0%;"></div>
+      </div>
+      <div class="keyframe-controls" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:center;">
+        <button id="addKeyframeBtn" class="btn btn-outline btn-sm">➕ Thêm keyframe</button>
+        <button id="clearKeyframesBtn" class="btn btn-danger btn-sm">🗑️ Xóa tất cả</button>
+        <span style="font-size:13px;color:rgba(255,255,255,0.4);">Âm lượng: <span id="volumeDisplay">100</span>%</span>
+        <label>Vol <input type="range" id="volumeSlider" min="0" max="100" value="100" style="width:100px;" /></label>
+      </div>
+    </div>
 
-        async function fetchBilibili(url) {
-            let bvid = '';
-            const bvMatch = url.match(/BV([a-zA-Z0-9]{10})/);
-            if (bvMatch) bvid = 'BV' + bvMatch[1];
-            else {
-                const resp = await fetch(url, { method: 'HEAD', redirect: 'follow' });
-                const finalUrl = resp.url;
-                const m2 = finalUrl.match(/BV([a-zA-Z0-9]{10})/);
-                if (m2) bvid = 'BV' + m2[1];
-                else throw new Error('Không tìm thấy BVID');
-            }
-            const infoUrl = `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`;
-            const infoRes = await fetch(infoUrl);
-            if (!infoRes.ok) throw new Error('Lỗi API Bilibili');
-            const infoData = await infoRes.json();
-            if (infoData.code !== 0) throw new Error(infoData.message || 'Lỗi Bilibili');
-            const v = infoData.data;
-            const cid = v.cid;
-            const playUrl = `https://api.bilibili.com/x/player/playurl?bvid=${bvid}&cid=${cid}&qn=80&type=mp4`;
-            const playRes = await fetch(playUrl);
-            if (!playRes.ok) throw new Error('Lỗi lấy link video');
-            const playData = await playRes.json();
-            if (playData.code !== 0) throw new Error(playData.message || 'Lỗi link video');
-            const videoUrl = playData.data?.durl?.[0]?.url || playData.data?.dash?.video?.[0]?.baseUrl || '';
-            const audioUrl = playData.data?.dash?.audio?.[0]?.baseUrl || '';
-            if (!videoUrl) throw new Error('Không có link video');
-            return {
-                title: v.title || 'Video Bilibili',
-                author: v.owner?.name || 'unknown',
-                thumbnail: v.pic || '',
-                videoNoWatermark: videoUrl,
-                videoHD: videoUrl,
-                audio: audioUrl,
-                platform: 'bilibili',
-                caption: v.title || ''
-            };
-        }
+    <div class="info-grid">
+      <div class="item">🎵 Audio: <span id="audioStatus">Chưa tải</span></div>
+      <div class="item">🎤 Vocal: <span id="vocalStatus">Chưa tách</span></div>
+      <div class="item">🔊 Keyframes: <span id="keyframeCount">0</span></div>
+    </div>
 
-        fetchBtn.addEventListener('click', async () => {
-            const url = urlInput.value.trim();
-            if (!url) { showToast('⚠️ Nhập link', true); return; }
-            const platform = detectPlatform(url);
-            if (!platform) { showToast('⚠️ Link không hỗ trợ', true); return; }
-            try {
-                fetchBtn.disabled = true;
-                fetchBtn.textContent = '⏳ Đang tải...';
-                let data;
-                if (platform === 'tiktok') data = await fetchTikTok(url);
-                else data = await fetchBilibili(url);
-                currentDownloadData = data;
-                dlTitle.textContent = data.title;
-                dlAuthor.textContent = data.author;
-                dlPlatform.textContent = platform === 'tiktok' ? '📱 TikTok' : '📺 Bilibili';
-                dlThumbImg.src = data.thumbnail || '';
-                downloadResult.classList.add('show');
-                showToast('✅ Đã lấy thông tin');
-            } catch (err) {
-                showToast('❌ ' + err.message, true);
-            } finally {
-                fetchBtn.disabled = false;
-                fetchBtn.textContent = '🔍 Lấy thông tin';
-            }
-        });
+    <div class="row">
+      <button id="playAudioBtn" class="btn btn-success btn-sm">▶️ Phát</button>
+      <button id="pauseAudioBtn" class="btn btn-outline btn-sm">⏸️ Tạm dừng</button>
+      <button id="stopAudioBtn" class="btn btn-danger btn-sm">⏹️ Dừng</button>
+      <label class="file-input-wrap"><span class="btn btn-outline btn-sm">📥 Giọng thay thế</span><input type="file" id="replaceVoiceInput" accept="audio/*" /></label>
+    </div>
+  </div>
 
-        dlActions.addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn');
-            if (!btn || !currentDownloadData) return;
-            const quality = btn.dataset.quality;
-            let url = '';
-            let filename = '';
-            if (quality === 'normal') { url = currentDownloadData.videoNoWatermark;
-                filename = 'video_nowm.mp4'; } else if (quality === 'hd') { url = currentDownloadData.videoHD;
-                filename = 'video_hd.mp4'; } else if (quality === 'mp3') { url = currentDownloadData.audio;
-                filename = 'audio.mp3'; }
-            if (!url) { showToast('❌ Không có link', true); return; }
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            showToast('✅ Đang tải...');
-        });
+  <!-- ============================================================ -->
+  <!-- TAB 4: EXE → CODE (Mô phỏng) -->
+  <!-- ============================================================ -->
+  <div id="tab-exe" class="tab-content">
+    <div class="row">
+      <label class="file-input-wrap"><span class="btn btn-primary btn-sm">📂 Chọn file EXE</span><input type="file" id="exeFileInput" accept=".exe" /></label>
+      <select id="exeLangSelect" style="flex:1;min-width:120px;">
+        <option value="csharp">C# (.NET)</option>
+        <option value="cpp">C++ (Native)</option>
+        <option value="python">Python (PyInstaller)</option>
+        <option value="vb6">Visual Basic 6</option>
+        <option value="java">Java (JAR)</option>
+      </select>
+      <button id="exeConvertBtn" class="btn btn-warning">🔄 Chuyển đổi</button>
+    </div>
+    <div class="info-grid">
+      <div class="item">📁 File: <span id="exeFileName">Chưa chọn</span></div>
+      <div class="item">📏 Dung lượng: <span id="exeFileSize">-</span></div>
+      <div class="item">🛠️ Trạng thái: <span id="exeStatus">Chờ xử lý</span></div>
+    </div>
+    <div id="exeResult" class="result-box" style="margin-top:12px;">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+        <strong style="color:#00f2ea;">📄 Mã nguồn dự kiến</strong>
+        <button id="exeCopyBtn" class="btn btn-outline btn-sm">📋 Copy</button>
+      </div>
+      <div class="code-block" id="exeCodeBlock">// Mã nguồn sẽ hiển thị ở đây sau khi chuyển đổi...</div>
+      <div style="margin-top:8px;font-size:13px;color:rgba(255,255,255,0.3);">
+        ⚠️ Lưu ý: Đây là chức năng mô phỏng. Kết quả chỉ mang tính tham khảo, không phải mã nguồn chính xác 100%.
+        Để có mã nguồn thật, bạn cần dùng các công cụ decompile chuyên dụng (dnSpy, Ghidra, ILSpy...).
+      </div>
+    </div>
+  </div>
 
-        copyCaptionBtn.addEventListener('click', () => {
-            if (!currentDownloadData) return;
-            navigator.clipboard.writeText(currentDownloadData.caption || '')
-                .then(() => showToast('📋 Đã copy caption'))
-                .catch(() => showToast('❌ Lỗi copy', true));
-        });
+</div>
 
-        // ============================================================
-        //  PART 2: EDITOR (Video + Ảnh + Circle Mask)
-        // ============================================================
-        const videoPlayer = document.getElementById('videoPlayer');
-        const canvas = document.getElementById('canvasOverlay');
-        const ctx = canvas.getContext('2d');
-        const videoInput = document.getElementById('videoInput');
-        const imageInput = document.getElementById('imageInput');
-        const resetImagesBtn = document.getElementById('resetImagesBtn');
-        const newProjectBtn = document.getElementById('newProjectBtn');
-        const exportBtn = document.getElementById('exportBtn');
-        const cutStart = document.getElementById('cutStart');
-        const cutEnd = document.getElementById('cutEnd');
-        const applyCutBtn = document.getElementById('applyCutBtn');
-        const rotateSlider = document.getElementById('rotateSlider');
-        const flipSelect = document.getElementById('flipSelect');
-        const brightnessSlider = document.getElementById('brightnessSlider');
-        const contrastSlider = document.getElementById('contrastSlider');
-        const enableCircleBtn = document.getElementById('enableCircleBtn');
-        const applyCircleBtn = document.getElementById('applyCircleBtn');
-        const disableCircleBtn = document.getElementById('disableCircleBtn');
-        const circleSize = document.getElementById('circleSize');
-        const circleX = document.getElementById('circleX');
-        const circleY = document.getElementById('circleY');
-        const circleMode = document.getElementById('circleMode');
-        const projectNameSpan = document.getElementById('projectName');
-        const imageCountSpan = document.getElementById('imageCount');
-        const videoStatusSpan = document.getElementById('videoStatus');
+<div id="toast" class="toast"></div>
 
-        let editorState = {
-            videoSrc: null,
-            images: [],
-            cutStart: 0,
-            cutEnd: 10,
-            rotation: 0,
-            flip: 'none',
-            brightness: 100,
-            contrast: 100,
-            circle: { enabled: false, x: 50, y: 50, size: 100, mode: 'outside' },
-            applied: false,
-            isCircleMode: false
-        };
+<script>
+// ============================================================
+//  TOAST HELPER
+// ============================================================
+function showToast(msg, isError = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = isError ? 'rgba(200,50,50,0.9)' : 'rgba(0,0,0,0.85)';
+  el.classList.add('show');
+  clearTimeout(el._timeout);
+  el._timeout = setTimeout(() => el.classList.remove('show'), 3000);
+}
 
-        function resizeCanvas() {
-            const rect = document.getElementById('editorArea').getBoundingClientRect();
-            canvas.width = rect.width * window.devicePixelRatio;
-            canvas.height = rect.height * window.devicePixelRatio;
-            canvas.style.width = rect.width + 'px';
-            canvas.style.height = rect.height + 'px';
-            drawCanvas();
-        }
+// ============================================================
+//  TABS
+// ============================================================
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    const target = this.dataset.tab;
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    document.getElementById('tab-' + target).classList.add('active');
+  });
+});
 
-        function drawCanvas() {
-            const w = canvas.width,
-                h = canvas.height;
-            ctx.clearRect(0, 0, w, h);
-            if (!videoPlayer.src) return;
-            ctx.save();
-            ctx.translate(w / 2, h / 2);
-            const rot = (editorState.rotation || 0) * Math.PI / 180;
-            ctx.rotate(rot);
-            let sx = 1,
-                sy = 1;
-            if (editorState.flip === 'horizontal') sx = -1;
-            if (editorState.flip === 'vertical') sy = -1;
-            ctx.scale(sx, sy);
-            ctx.drawImage(videoPlayer, -w / 2, -h / 2, w, h);
-            ctx.restore();
+// ============================================================
+//  PART 1: DOWNLOADER (TikTok & Bilibili)
+// ============================================================
+const urlInput = document.getElementById('urlInput');
+const fetchBtn = document.getElementById('fetchBtn');
+const downloadResult = document.getElementById('downloadResult');
+const dlTitle = document.getElementById('dlTitle');
+const dlAuthor = document.getElementById('dlAuthor');
+const dlPlatform = document.getElementById('dlPlatform');
+const dlThumbImg = document.getElementById('dlThumbImg');
+const dlActions = document.getElementById('dlActions');
+const copyCaptionBtn = document.getElementById('copyCaptionBtn');
 
-            // Độ sáng/tương phản
-            if (editorState.brightness !== 100 || editorState.contrast !== 100) {
-                const imgData = ctx.getImageData(0, 0, w, h);
-                const d = imgData.data;
-                const b = editorState.brightness / 100;
-                const c = editorState.contrast / 100;
-                for (let i = 0; i < d.length; i += 4) {
-                    d[i] = Math.min(255, Math.max(0, ((d[i] / 255 - 0.5) * c + 0.5) * b * 255));
-                    d[i + 1] = Math.min(255, Math.max(0, ((d[i + 1] / 255 - 0.5) * c + 0.5) * b * 255));
-                    d[i + 2] = Math.min(255, Math.max(0, ((d[i + 2] / 255 - 0.5) * c + 0.5) * b * 255));
-                }
-                ctx.putImageData(imgData, 0, 0);
-            }
+let currentDownloadData = null;
 
-            // Circle mask
-            if (editorState.circle.enabled && editorState.applied) {
-                const cx = (editorState.circle.x / 100) * w;
-                const cy = (editorState.circle.y / 100) * h;
-                const r = (editorState.circle.size / 200) * Math.min(w, h);
-                const imgData = ctx.getImageData(0, 0, w, h);
-                const d = imgData.data;
-                const mode = editorState.circle.mode;
-                for (let y = 0; y < h; y++) {
-                    for (let x = 0; x < w; x++) {
-                        const idx = (y * w + x) * 4;
-                        const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
-                        const inside = dist <= r;
-                        if ((mode === 'outside' && inside) || (mode === 'inside' && !inside)) {
-                            d[idx + 3] = 0;
-                        }
-                    }
-                }
-                ctx.putImageData(imgData, 0, 0);
-            }
+function detectPlatform(url) {
+  if (url.includes('tiktok.com') || url.includes('vm.tiktok.com')) return 'tiktok';
+  if (url.includes('bilibili.com') || url.includes('b23.tv')) return 'bilibili';
+  return null;
+}
 
-            // Vẽ ảnh overlay
-            editorState.images.forEach(img => {
-                const imgObj = new Image();
-                imgObj.src = img.dataUrl;
-                imgObj.onload = () => {
-                    ctx.drawImage(imgObj, img.x, img.y, img.w, img.h);
-                };
-                if (imgObj.complete) {
-                    ctx.drawImage(imgObj, img.x, img.y, img.w, img.h);
-                }
-            });
+async function fetchTikTok(url) {
+  const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`;
+  const res = await fetch(apiUrl);
+  if (!res.ok) throw new Error('Lỗi API TikTok');
+  const data = await res.json();
+  if (data.code !== 0 || !data.data) throw new Error(data.msg || 'Không tìm thấy video');
+  const d = data.data;
+  return {
+    title: d.title || 'Video TikTok',
+    author: d.author?.unique_id || d.author?.nickname || 'unknown',
+    thumbnail: d.cover || '',
+    videoNoWatermark: d.play || d.wmplay || '',
+    videoHD: d.hdplay || d.play || '',
+    audio: d.music || '',
+    platform: 'tiktok',
+    caption: d.title || ''
+  };
+}
 
-            // Vẽ vòng tròn nếu đang ở chế độ chỉnh sửa
-            if (editorState.isCircleMode) {
-                const cx = (editorState.circle.x / 100) * w;
-                const cy = (editorState.circle.y / 100) * h;
-                const r = (editorState.circle.size / 200) * Math.min(w, h);
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-                ctx.strokeStyle = '#ff0050';
-                ctx.lineWidth = 3;
-                ctx.setLineDash([6, 8]);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                ctx.fillStyle = 'rgba(255,0,80,0.1)';
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(cx, cy, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = '#ff0050';
-                ctx.fill();
-            }
-        }
+async function fetchBilibili(url) {
+  let bvid = '';
+  const bvMatch = url.match(/BV([a-zA-Z0-9]{10})/);
+  if (bvMatch) bvid = 'BV' + bvMatch[1];
+  else {
+    const resp = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+    const finalUrl = resp.url;
+    const m2 = finalUrl.match(/BV([a-zA-Z0-9]{10})/);
+    if (m2) bvid = 'BV' + m2[1];
+    else throw new Error('Không tìm thấy BVID');
+  }
+  const infoUrl = `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`;
+  const infoRes = await fetch(infoUrl);
+  if (!infoRes.ok) throw new Error('Lỗi API Bilibili');
+  const infoData = await infoRes.json();
+  if (infoData.code !== 0) throw new Error(infoData.message || 'Lỗi Bilibili');
+  const v = infoData.data;
+  const cid = v.cid;
+  const playUrl = `https://api.bilibili.com/x/player/playurl?bvid=${bvid}&cid=${cid}&qn=80&type=mp4`;
+  const playRes = await fetch(playUrl);
+  if (!playRes.ok) throw new Error('Lỗi lấy link video');
+  const playData = await playRes.json();
+  if (playData.code !== 0) throw new Error(playData.message || 'Lỗi link video');
+  const videoUrl = playData.data?.durl?.[0]?.url || playData.data?.dash?.video?.[0]?.baseUrl || '';
+  const audioUrl = playData.data?.dash?.audio?.[0]?.baseUrl || '';
+  if (!videoUrl) throw new Error('Không có link video');
+  return {
+    title: v.title || 'Video Bilibili',
+    author: v.owner?.name || 'unknown',
+    thumbnail: v.pic || '',
+    videoNoWatermark: videoUrl,
+    videoHD: videoUrl,
+    audio: audioUrl,
+    platform: 'bilibili',
+    caption: v.title || ''
+  };
+}
 
-        // Load video
-        videoInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const url = URL.createObjectURL(file);
-            videoPlayer.src = url;
-            videoPlayer.load();
-            videoPlayer.onloadedmetadata = () => {
-                cutEnd.value = videoPlayer.duration.toFixed(1);
-                editorState.videoSrc = url;
-                videoStatusSpan.textContent = file.name;
-                resizeCanvas();
-                videoPlayer.play();
-                videoPlayer.addEventListener('play', () => {
-                    function loop() {
-                        if (!videoPlayer.paused && !videoPlayer.ended) {
-                            drawCanvas();
-                            requestAnimationFrame(loop);
-                        }
-                    }
-                    loop();
-                });
-                videoPlayer.addEventListener('seeked', drawCanvas);
-            };
-        });
+fetchBtn.addEventListener('click', async () => {
+  const url = urlInput.value.trim();
+  if (!url) { showToast('⚠️ Nhập link', true); return; }
+  const platform = detectPlatform(url);
+  if (!platform) { showToast('⚠️ Link không hỗ trợ', true); return; }
+  try {
+    fetchBtn.disabled = true; fetchBtn.textContent = '⏳ Đang tải...';
+    let data;
+    if (platform === 'tiktok') data = await fetchTikTok(url);
+    else data = await fetchBilibili(url);
+    currentDownloadData = data;
+    dlTitle.textContent = data.title;
+    dlAuthor.textContent = data.author;
+    dlPlatform.textContent = platform === 'tiktok' ? '📱 TikTok' : '📺 Bilibili';
+    dlThumbImg.src = data.thumbnail || '';
+    downloadResult.classList.add('show');
+    showToast('✅ Đã lấy thông tin');
+  } catch (err) { showToast('❌ ' + err.message, true); }
+  finally { fetchBtn.disabled = false; fetchBtn.textContent = '🔍 Lấy thông tin'; }
+});
 
-        // Thêm ảnh
-        imageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.onload = () => {
-                    editorState.images.push({
-                        x: 50,
-                        y: 50,
-                        w: 150,
-                        h: 150,
-                        dataUrl: ev.target.result
-                    });
-                    imageCountSpan.textContent = editorState.images.length;
-                    drawCanvas();
-                    showToast('✅ Đã thêm ảnh');
-                };
-                img.src = ev.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
+dlActions.addEventListener('click', (e) => {
+  const btn = e.target.closest('.btn');
+  if (!btn || !currentDownloadData) return;
+  const quality = btn.dataset.quality;
+  let url = '', filename = '';
+  if (quality === 'normal') { url = currentDownloadData.videoNoWatermark; filename = 'video_nowm.mp4'; }
+  else if (quality === 'hd') { url = currentDownloadData.videoHD; filename = 'video_hd.mp4'; }
+  else if (quality === 'mp3') { url = currentDownloadData.audio; filename = 'audio.mp3'; }
+  if (!url) { showToast('❌ Không có link', true); return; }
+  const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+  showToast('✅ Đang tải...');
+});
 
-        resetImagesBtn.addEventListener('click', () => {
-            editorState.images = [];
-            imageCountSpan.textContent = '0';
-            drawCanvas();
-            showToast('🗑️ Đã xóa ảnh');
-        });
+copyCaptionBtn.addEventListener('click', () => {
+  if (!currentDownloadData) return;
+  navigator.clipboard.writeText(currentDownloadData.caption || '')
+    .then(() => showToast('📋 Đã copy caption'))
+    .catch(() => showToast('❌ Lỗi copy', true));
+});
 
-        // Cắt video
-        applyCutBtn.addEventListener('click', () => {
-            const start = parseFloat(cutStart.value);
-            const end = parseFloat(cutEnd.value);
-            if (start >= end) { showToast('⚠️ Lỗi thời gian', true); return; }
-            videoPlayer.currentTime = start;
-            showToast(`✂️ Cắt từ ${start}s đến ${end}s`);
-        });
+// ============================================================
+//  PART 2: EDITOR (Video + Ảnh + Circle Mask)
+// ============================================================
+const videoPlayer = document.getElementById('videoPlayer');
+const canvas = document.getElementById('canvasOverlay');
+const ctx = canvas.getContext('2d');
+const videoInput = document.getElementById('videoInput');
+const imageInput = document.getElementById('imageInput');
+const resetImagesBtn = document.getElementById('resetImagesBtn');
+const newProjectBtn = document.getElementById('newProjectBtn');
+const exportBtn = document.getElementById('exportBtn');
+const cutStart = document.getElementById('cutStart');
+const cutEnd = document.getElementById('cutEnd');
+const applyCutBtn = document.getElementById('applyCutBtn');
+const rotateSlider = document.getElementById('rotateSlider');
+const flipSelect = document.getElementById('flipSelect');
+const brightnessSlider = document.getElementById('brightnessSlider');
+const contrastSlider = document.getElementById('contrastSlider');
+const enableCircleBtn = document.getElementById('enableCircleBtn');
+const applyCircleBtn = document.getElementById('applyCircleBtn');
+const disableCircleBtn = document.getElementById('disableCircleBtn');
+const circleSize = document.getElementById('circleSize');
+const circleX = document.getElementById('circleX');
+const circleY = document.getElementById('circleY');
+const circleMode = document.getElementById('circleMode');
+const projectNameSpan = document.getElementById('projectName');
+const imageCountSpan = document.getElementById('imageCount');
+const videoStatusSpan = document.getElementById('videoStatus');
 
-        // Xoay, lật, sáng, tương phản
-        rotateSlider.addEventListener('input', () => { editorState.rotation = parseFloat(rotateSlider.value);
-            drawCanvas(); });
-        flipSelect.addEventListener('change', () => { editorState.flip = flipSelect.value;
-            drawCanvas(); });
-        brightnessSlider.addEventListener('input', () => { editorState.brightness = parseFloat(brightnessSlider.value);
-            drawCanvas(); });
-        contrastSlider.addEventListener('input', () => { editorState.contrast = parseFloat(contrastSlider.value);
-            drawCanvas(); });
+let editorState = {
+  videoSrc: null,
+  images: [],
+  cutStart: 0,
+  cutEnd: 10,
+  rotation: 0,
+  flip: 'none',
+  brightness: 100,
+  contrast: 100,
+  circle: { enabled: false, x: 50, y: 50, size: 100, mode: 'outside' },
+  applied: false,
+  isCircleMode: false
+};
 
-        // Circle mask
-        enableCircleBtn.addEventListener('click', () => {
-            editorState.isCircleMode = true;
-            editorState.circle.enabled = true;
-            editorState.applied = false;
-            canvas.classList.add('active');
-            drawCanvas();
-            showToast('⭕ Chỉnh vòng tròn, kéo thả');
-        });
-        applyCircleBtn.addEventListener('click', () => {
-            if (!editorState.circle.enabled) { showToast('⚠️ Chưa bật', true); return; }
-            editorState.applied = true;
-            editorState.isCircleMode = false;
-            canvas.classList.remove('active');
-            drawCanvas();
-            showToast('✅ Đã áp dụng tách nền');
-        });
-        disableCircleBtn.addEventListener('click', () => {
-            editorState.isCircleMode = false;
-            editorState.circle.enabled = false;
-            editorState.applied = false;
-            canvas.classList.remove('active');
-            drawCanvas();
-            showToast('❌ Đã tắt');
-        });
+function resizeCanvas() {
+  const rect = document.getElementById('editorArea').getBoundingClientRect();
+  canvas.width = rect.width * window.devicePixelRatio;
+  canvas.height = rect.height * window.devicePixelRatio;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  drawCanvas();
+}
 
-        circleSize.addEventListener('input', () => { editorState.circle.size = parseFloat(circleSize.value); if (editorState
-                .isCircleMode) drawCanvas(); });
-        circleX.addEventListener('input', () => { editorState.circle.x = parseFloat(circleX.value); if (editorState
-                .isCircleMode) drawCanvas(); });
-        circleY.addEventListener('input', () => { editorState.circle.y = parseFloat(circleY.value); if (editorState
-                .isCircleMode) drawCanvas(); });
-        circleMode.addEventListener('change', () => { editorState.circle.mode = circleMode.value; if (editorState
-                .isCircleMode) drawCanvas(); });
+function drawCanvas() {
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  if (!videoPlayer.src) return;
+  ctx.save();
+  ctx.translate(w/2, h/2);
+  const rot = (editorState.rotation || 0) * Math.PI / 180;
+  ctx.rotate(rot);
+  let sx=1, sy=1;
+  if (editorState.flip === 'horizontal') sx = -1;
+  if (editorState.flip === 'vertical') sy = -1;
+  ctx.scale(sx, sy);
+  ctx.drawImage(videoPlayer, -w/2, -h/2, w, h);
+  ctx.restore();
 
-        // Drag circle
-        let dragState = null;
-        canvas.addEventListener('mousedown', (e) => {
-            if (!editorState.isCircleMode) return;
-            const rect = canvas.getBoundingClientRect();
-            const sx = canvas.width / rect.width,
-                sy = canvas.height / rect.height;
-            const mx = (e.clientX - rect.left) * sx,
-                my = (e.clientY - rect.top) * sy;
-            const cx = (editorState.circle.x / 100) * canvas.width,
-                cy = (editorState.circle.y / 100) * canvas.height;
-            const r = (editorState.circle.size / 200) * Math.min(canvas.width, canvas.height);
-            const dist = Math.sqrt((mx - cx) ** 2 + (my - cy) ** 2);
-            if (dist < r + 10) dragState = { type: 'move' };
-            else dragState = null;
-        });
-        canvas.addEventListener('mousemove', (e) => {
-            if (!editorState.isCircleMode || !dragState) return;
-            const rect = canvas.getBoundingClientRect();
-            const sx = canvas.width / rect.width,
-                sy = canvas.height / rect.height;
-            const mx = (e.clientX - rect.left) * sx,
-                my = (e.clientY - rect.top) * sy;
-            if (dragState.type === 'move') {
-                editorState.circle.x = (mx / canvas.width) * 100;
-                editorState.circle.y = (my / canvas.height) * 100;
-                circleX.value = editorState.circle.x;
-                circleY.value = editorState.circle.y;
-                drawCanvas();
-            }
-        });
-        canvas.addEventListener('mouseup', () => { dragState = null; });
-        canvas.addEventListener('mouseleave', () => { dragState = null; });
+  // brightness/contrast
+  if (editorState.brightness !== 100 || editorState.contrast !== 100) {
+    const imgData = ctx.getImageData(0,0,w,h);
+    const d = imgData.data;
+    const b = editorState.brightness / 100;
+    const c = editorState.contrast / 100;
+    for (let i=0; i<d.length; i+=4) {
+      d[i] = Math.min(255, Math.max(0, ((d[i]/255 - 0.5) * c + 0.5) * b * 255));
+      d[i+1] = Math.min(255, Math.max(0, ((d[i+1]/255 - 0.5) * c + 0.5) * b * 255));
+      d[i+2] = Math.min(255, Math.max(0, ((d[i+2]/255 - 0.5) * c + 0.5) * b * 255));
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
 
-        // Touch events
-        canvas.addEventListener('touchstart', (e) => {
-            if (!editorState.isCircleMode) return;
-            const t = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const sx = canvas.width / rect.width,
-                sy = canvas.height / rect.height;
-            const mx = (t.clientX - rect.left) * sx,
-                my = (t.clientY - rect.top) * sy;
-            const cx = (editorState.circle.x / 100) * canvas.width,
-                cy = (editorState.circle.y / 100) * canvas.height;
-            const r = (editorState.circle.size / 200) * Math.min(canvas.width, canvas.height);
-            const dist = Math.sqrt((mx - cx) ** 2 + (my - cy) ** 2);
-            if (dist < r + 10) dragState = { type: 'move' };
-            else dragState = null;
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            if (!editorState.isCircleMode || !dragState) return;
-            e.preventDefault();
-            const t = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const sx = canvas.width / rect.width,
-                sy = canvas.height / rect.height;
-            const mx = (t.clientX - rect.left) * sx,
-                my = (t.clientY - rect.top) * sy;
-            if (dragState.type === 'move') {
-                editorState.circle.x = (mx / canvas.width) * 100;
-                editorState.circle.y = (my / canvas.height) * 100;
-                circleX.value = editorState.circle.x;
-                circleY.value = editorState.circle.y;
-                drawCanvas();
-            }
-        });
-        canvas.addEventListener('touchend', () => { dragState = null; });
+  // circle mask
+  if (editorState.circle.enabled && editorState.applied) {
+    const cx = (editorState.circle.x/100)*w;
+    const cy = (editorState.circle.y/100)*h;
+    const r = (editorState.circle.size/200)*Math.min(w,h);
+    const imgData = ctx.getImageData(0,0,w,h);
+    const d = imgData.data;
+    const mode = editorState.circle.mode;
+    for (let y=0; y<h; y++) for (let x=0; x<w; x++) {
+      const idx = (y*w + x)*4;
+      const dist = Math.sqrt((x-cx)**2 + (y-cy)**2);
+      const inside = dist <= r;
+      if ((mode === 'outside' && inside) || (mode === 'inside' && !inside)) d[idx+3] = 0;
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
 
-        // New project
-        newProjectBtn.addEventListener('click', () => {
-            editorState = {
-                videoSrc: null,
-                images: [],
-                cutStart: 0,
-                cutEnd: 10,
-                rotation: 0,
-                flip: 'none',
-                brightness: 100,
-                contrast: 100,
-                circle: { enabled: false, x: 50, y: 50, size: 100, mode: 'outside' },
-                applied: false,
-                isCircleMode: false
-            };
-            videoPlayer.src = '';
-            imageCountSpan.textContent = '0';
-            videoStatusSpan.textContent = 'Chưa tải';
-            rotateSlider.value = 0;
-            flipSelect.value = 'none';
-            brightnessSlider.value = 100;
-            contrastSlider.value = 100;
-            circleX.value = 50;
-            circleY.value = 50;
-            circleSize.value = 100;
-            cutStart.value = 0;
-            cutEnd.value = 10;
-            canvas.classList.remove('active');
-            drawCanvas();
-            showToast('📁 Dự án mới');
-        });
+  // overlay images
+  editorState.images.forEach(img => {
+    const imgObj = new Image();
+    imgObj.src = img.dataUrl;
+    imgObj.onload = () => ctx.drawImage(imgObj, img.x, img.y, img.w, img.h);
+    if (imgObj.complete) ctx.drawImage(imgObj, img.x, img.y, img.w, img.h);
+  });
 
-        // Export
-        exportBtn.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.download = 'project_' + Date.now() + '.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            showToast('💾 Đã xuất ảnh');
-        });
+  // circle guide
+  if (editorState.isCircleMode) {
+    const cx = (editorState.circle.x/100)*w;
+    const cy = (editorState.circle.y/100)*h;
+    const r = (editorState.circle.size/200)*Math.min(w,h);
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2*Math.PI);
+    ctx.strokeStyle = '#ff0050'; ctx.lineWidth = 3; ctx.setLineDash([6,8]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,0,80,0.1)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, 6, 0, 2*Math.PI); ctx.fillStyle = '#ff0050'; ctx.fill();
+  }
+}
 
-        window.addEventListener('resize', resizeCanvas);
+// load video
+videoInput.addEventListener('change', (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  const url = URL.createObjectURL(file);
+  videoPlayer.src = url;
+  videoPlayer.load();
+  videoPlayer.onloadedmetadata = () => {
+    cutEnd.value = videoPlayer.duration.toFixed(1);
+    editorState.videoSrc = url;
+    videoStatusSpan.textContent = file.name;
+    resizeCanvas();
+    videoPlayer.play();
+    videoPlayer.addEventListener('play', () => { function loop() { if (!videoPlayer.paused && !videoPlayer.ended) { drawCanvas(); requestAnimationFrame(loop); } } loop(); });
+    videoPlayer.addEventListener('seeked', drawCanvas);
+  };
+});
 
-        // ============================================================
-        //  PART 3: AUDIO EDITOR (Tách giọng, keyframe, thay giọng)
-        // ============================================================
-        const audioFileInput = document.getElementById('audioFileInput');
-        const extractVocalBtn = document.getElementById('extractVocalBtn');
-        const replaceVoiceBtn = document.getElementById('replaceVoiceBtn');
-        const syncAudioBtn = document.getElementById('syncAudioBtn');
-        const delaySlider = document.getElementById('delaySlider');
-        const delayValue = document.getElementById('delayValue');
-        const timelineTrack = document.getElementById('timelineTrack');
-        const playhead = document.getElementById('playhead');
-        const addKeyframeBtn = document.getElementById('addKeyframeBtn');
-        const clearKeyframesBtn = document.getElementById('clearKeyframesBtn');
-        const volumeDisplay = document.getElementById('volumeDisplay');
-        const audioStatus = document.getElementById('audioStatus');
-        const vocalStatus = document.getElementById('vocalStatus');
-        const keyframeCount = document.getElementById('keyframeCount');
-        const playAudioBtn = document.getElementById('playAudioBtn');
-        const pauseAudioBtn = document.getElementById('pauseAudioBtn');
-        const stopAudioBtn = document.getElementById('stopAudioBtn');
-        const replaceVoiceInput = document.getElementById('replaceVoiceInput');
+imageInput.addEventListener('change', (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      editorState.images.push({ x: 50, y: 50, w: 150, h: 150, dataUrl: ev.target.result });
+      imageCountSpan.textContent = editorState.images.length;
+      drawCanvas();
+      showToast('✅ Đã thêm ảnh');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
 
-        let audioContext = null;
-        let audioBuffer = null;
-        let vocalBuffer = null;
-        let sourceNode = null;
-        let gainNode = null;
-        let keyframes = [];
-        let currentTime = 0;
-        let isPlaying = false;
-        let audioDuration = 0;
-        let replaceVoiceBuffer = null;
+resetImagesBtn.addEventListener('click', () => { editorState.images = []; imageCountSpan.textContent = '0'; drawCanvas(); showToast('🗑️ Đã xóa ảnh'); });
 
-        // Load audio/video for audio editing
-        audioFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async (ev) => {
-                try {
-                    const arrayBuffer = ev.target.result;
-                    audioContext = new(window.AudioContext || window.webkitAudioContext)();
-                    audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                    audioDuration = audioBuffer.duration;
-                    audioStatus.textContent = file.name + ' (' + audioDuration.toFixed(1) + 's)';
-                    showToast('✅ Đã tải audio: ' + file.name);
-                    // Reset keyframes
-                    keyframes = [];
-                    keyframeCount.textContent = '0';
-                    updateTimeline();
-                } catch (err) {
-                    showToast('❌ Lỗi tải audio: ' + err.message, true);
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        });
+applyCutBtn.addEventListener('click', () => {
+  const start = parseFloat(cutStart.value), end = parseFloat(cutEnd.value);
+  if (start >= end) { showToast('⚠️ Lỗi thời gian', true); return; }
+  videoPlayer.currentTime = start;
+  showToast(`✂️ Cắt từ ${start}s đến ${end}s`);
+});
 
-        // Tách giọng (vocal) – mô phỏng, thực tế dùng Web Audio filter
-        extractVocalBtn.addEventListener('click', async () => {
-            if (!audioBuffer) { showToast('⚠️ Chưa tải audio', true); return; }
-            try {
-                showToast('⏳ Đang tách giọng...');
-                // Mô phỏng tách vocal (trong thực tế cần ffmpeg.wasm)
-                // Tạo bản copy và áp dụng filter lowpass/highpass? Không thực sự tách được.
-                // Để demo, ta copy buffer và hiển thị thông báo.
-                vocalBuffer = audioBuffer;
-                vocalStatus.textContent = 'Đã tách (mô phỏng)';
-                showToast('✅ Đã tách giọng (demo)');
-            } catch (err) {
-                showToast('❌ Lỗi tách: ' + err.message, true);
-            }
-        });
+rotateSlider.addEventListener('input', () => { editorState.rotation = parseFloat(rotateSlider.value); drawCanvas(); });
+flipSelect.addEventListener('change', () => { editorState.flip = flipSelect.value; drawCanvas(); });
+brightnessSlider.addEventListener('input', () => { editorState.brightness = parseFloat(brightnessSlider.value); drawCanvas(); });
+contrastSlider.addEventListener('input', () => { editorState.contrast = parseFloat(contrastSlider.value); drawCanvas(); });
 
-        // Thay giọng: load file audio khác
-        replaceVoiceInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async (ev) => {
-                try {
-                    const arrayBuffer = ev.target.result;
-                    const ctx = new(window.AudioContext || window.webkitAudioContext)();
-                    replaceVoiceBuffer = await ctx.decodeAudioData(arrayBuffer);
-                    showToast('✅ Đã tải giọng thay thế');
-                } catch (err) {
-                    showToast('❌ Lỗi tải: ' + err.message, true);
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        });
+enableCircleBtn.addEventListener('click', () => {
+  editorState.isCircleMode = true; editorState.circle.enabled = true; editorState.applied = false;
+  canvas.classList.add('active'); drawCanvas(); showToast('⭕ Chỉnh vòng tròn, kéo thả');
+});
+applyCircleBtn.addEventListener('click', () => {
+  if (!editorState.circle.enabled) { showToast('⚠️ Chưa bật', true); return; }
+  editorState.applied = true; editorState.isCircleMode = false; canvas.classList.remove('active'); drawCanvas();
+  showToast('✅ Đã áp dụng tách nền');
+});
+disableCircleBtn.addEventListener('click', () => {
+  editorState.isCircleMode = false; editorState.circle.enabled = false; editorState.applied = false;
+  canvas.classList.remove('active'); drawCanvas(); showToast('❌ Đã tắt');
+});
 
-        replaceVoiceBtn.addEventListener('click', () => {
-            if (!replaceVoiceBuffer) { showToast('⚠️ Chưa tải giọng thay thế', true); return; }
-            if (!audioBuffer) { showToast('⚠️ Chưa có audio gốc', true); return; }
-            // Trong thực tế, ta cần merge âm thanh. Ở đây demo: thay thế vocal bằng giọng mới.
-            vocalBuffer = replaceVoiceBuffer;
-            vocalStatus.textContent = 'Đã thay giọng';
-            showToast('✅ Đã thay giọng (demo)');
-        });
+circleSize.addEventListener('input', () => { editorState.circle.size = parseFloat(circleSize.value); if (editorState.isCircleMode) drawCanvas(); });
+circleX.addEventListener('input', () => { editorState.circle.x = parseFloat(circleX.value); if (editorState.isCircleMode) drawCanvas(); });
+circleY.addEventListener('input', () => { editorState.circle.y = parseFloat(circleY.value); if (editorState.isCircleMode) drawCanvas(); });
+circleMode.addEventListener('change', () => { editorState.circle.mode = circleMode.value; if (editorState.isCircleMode) drawCanvas(); });
 
-        // Đồng bộ âm thanh – điều chỉnh delay
-        delaySlider.addEventListener('input', () => {
-            delayValue.value = delaySlider.value;
-        });
-        delayValue.addEventListener('input', () => {
-            delaySlider.value = delayValue.value;
-        });
+// drag circle
+let dragState = null;
+canvas.addEventListener('mousedown', (e) => {
+  if (!editorState.isCircleMode) return;
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width/rect.width, sy = canvas.height/rect.height;
+  const mx = (e.clientX - rect.left)*sx, my = (e.clientY - rect.top)*sy;
+  const cx = (editorState.circle.x/100)*canvas.width, cy = (editorState.circle.y/100)*canvas.height;
+  const r = (editorState.circle.size/200)*Math.min(canvas.width, canvas.height);
+  const dist = Math.sqrt((mx-cx)**2 + (my-cy)**2);
+  if (dist < r+10) dragState = { type: 'move' }; else dragState = null;
+});
+canvas.addEventListener('mousemove', (e) => {
+  if (!editorState.isCircleMode || !dragState) return;
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width/rect.width, sy = canvas.height/rect.height;
+  const mx = (e.clientX - rect.left)*sx, my = (e.clientY - rect.top)*sy;
+  if (dragState.type === 'move') {
+    editorState.circle.x = (mx/canvas.width)*100; editorState.circle.y = (my/canvas.height)*100;
+    circleX.value = editorState.circle.x; circleY.value = editorState.circle.y;
+    drawCanvas();
+  }
+});
+canvas.addEventListener('mouseup', () => { dragState = null; });
+canvas.addEventListener('mouseleave', () => { dragState = null; });
 
-        syncAudioBtn.addEventListener('click', () => {
-            const delay = parseFloat(delayValue.value) / 1000;
-            showToast(`🔄 Đồng bộ delay: ${delay.toFixed(3)}s`);
-        });
+canvas.addEventListener('touchstart', (e) => {
+  if (!editorState.isCircleMode) return;
+  const t = e.touches[0];
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width/rect.width, sy = canvas.height/rect.height;
+  const mx = (t.clientX - rect.left)*sx, my = (t.clientY - rect.top)*sy;
+  const cx = (editorState.circle.x/100)*canvas.width, cy = (editorState.circle.y/100)*canvas.height;
+  const r = (editorState.circle.size/200)*Math.min(canvas.width, canvas.height);
+  const dist = Math.sqrt((mx-cx)**2 + (my-cy)**2);
+  if (dist < r+10) dragState = { type: 'move' }; else dragState = null;
+});
+canvas.addEventListener('touchmove', (e) => {
+  if (!editorState.isCircleMode || !dragState) return;
+  e.preventDefault();
+  const t = e.touches[0];
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width/rect.width, sy = canvas.height/rect.height;
+  const mx = (t.clientX - rect.left)*sx, my = (t.clientY - rect.top)*sy;
+  if (dragState.type === 'move') {
+    editorState.circle.x = (mx/canvas.width)*100; editorState.circle.y = (my/canvas.height)*100;
+    circleX.value = editorState.circle.x; circleY.value = editorState.circle.y;
+    drawCanvas();
+  }
+});
+canvas.addEventListener('touchend', () => { dragState = null; });
 
-        // Keyframe
-        addKeyframeBtn.addEventListener('click', () => {
-            if (audioDuration <= 0) { showToast('⚠️ Chưa có audio', true); return; }
-            const time = Math.min(currentTime, audioDuration);
-            const volume = parseFloat(volumeDisplay.textContent) / 100;
-            keyframes.push({ time, volume });
-            keyframes.sort((a, b) => a.time - b.time);
-            keyframeCount.textContent = keyframes.length;
-            updateTimeline();
-            showToast('➕ Đã thêm keyframe tại ' + time.toFixed(1) + 's');
-        });
+newProjectBtn.addEventListener('click', () => {
+  editorState = { videoSrc:null, images:[], cutStart:0, cutEnd:10, rotation:0, flip:'none', brightness:100, contrast:100, circle:{enabled:false,x:50,y:50,size:100,mode:'outside'}, applied:false, isCircleMode:false };
+  videoPlayer.src = ''; imageCountSpan.textContent = '0'; videoStatusSpan.textContent = 'Chưa tải';
+  rotateSlider.value = 0; flipSelect.value = 'none'; brightnessSlider.value = 100; contrastSlider.value = 100;
+  circleX.value = 50; circleY.value = 50; circleSize.value = 100; cutStart.value = 0; cutEnd.value = 10;
+  canvas.classList.remove('active'); drawCanvas(); showToast('📁 Dự án mới');
+});
 
-        clearKeyframesBtn.addEventListener('click', () => {
-            keyframes = [];
-            keyframeCount.textContent = '0';
-            updateTimeline();
-            showToast('🗑️ Đã xóa keyframes');
-        });
+exportBtn.addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'project_' + Date.now() + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click(); showToast('💾 Đã xuất ảnh');
+});
 
-        function updateTimeline() {
-            // Clear existing keyframe elements (except playhead)
-            const track = timelineTrack;
-            const playheadEl = document.getElementById('playhead');
-            track.querySelectorAll('.keyframe').forEach(el => el.remove());
-            track.querySelectorAll('.keyframe-label').forEach(el => el.remove());
-            // Draw keyframes
-            keyframes.forEach(kf => {
-                const pos = (kf.time / audioDuration) * 100;
-                const div = document.createElement('div');
-                div.className = 'keyframe';
-                div.style.left = pos + '%';
-                div.title = kf.time.toFixed(1) + 's - ' + (kf.volume * 100).toFixed(0) + '%';
-                div.dataset.time = kf.time;
-                track.appendChild(div);
-                // label
-                const label = document.createElement('div');
-                label.className = 'keyframe-label';
-                label.style.left = pos + '%';
-                label.textContent = (kf.volume * 100).toFixed(0) + '%';
-                track.appendChild(label);
-            });
-        }
+window.addEventListener('resize', resizeCanvas);
 
-        // Play audio với keyframe volume
-        playAudioBtn.addEventListener('click', async () => {
-            if (!audioBuffer) { showToast('⚠️ Chưa tải audio', true); return; }
-            if (isPlaying) return;
-            try {
-                if (!audioContext) audioContext = new(window.AudioContext || window.webkitAudioContext)();
-                if (audioContext.state === 'suspended') await audioContext.resume();
+// ============================================================
+//  PART 3: AUDIO (Tách giọng, keyframe, thay giọng)
+// ============================================================
+const audioFileInput = document.getElementById('audioFileInput');
+const extractVocalBtn = document.getElementById('extractVocalBtn');
+const replaceVoiceBtn = document.getElementById('replaceVoiceBtn');
+const syncAudioBtn = document.getElementById('syncAudioBtn');
+const delaySlider = document.getElementById('delaySlider');
+const delayValue = document.getElementById('delayValue');
+const timelineTrack = document.getElementById('timelineTrack');
+const playhead = document.getElementById('playhead');
+const addKeyframeBtn = document.getElementById('addKeyframeBtn');
+const clearKeyframesBtn = document.getElementById('clearKeyframesBtn');
+const volumeDisplay = document.getElementById('volumeDisplay');
+const volumeSlider = document.getElementById('volumeSlider');
+const audioStatus = document.getElementById('audioStatus');
+const vocalStatus = document.getElementById('vocalStatus');
+const keyframeCount = document.getElementById('keyframeCount');
+const playAudioBtn = document.getElementById('playAudioBtn');
+const pauseAudioBtn = document.getElementById('pauseAudioBtn');
+const stopAudioBtn = document.getElementById('stopAudioBtn');
+const replaceVoiceInput = document.getElementById('replaceVoiceInput');
 
-                const source = audioContext.createBufferSource();
-                source.buffer = vocalBuffer || audioBuffer;
-                const gain = audioContext.createGain();
-                source.connect(gain);
-                gain.connect(audioContext.destination);
+let audioContext = null, audioBuffer = null, vocalBuffer = null, sourceNode = null, gainNode = null;
+let keyframes = [], currentTime = 0, isPlaying = false, audioDuration = 0;
+let replaceVoiceBuffer = null;
 
-                // Xử lý keyframe volume
-                const startTime = audioContext.currentTime;
-                const duration = source.buffer.duration;
-                const gainParam = gain.gain;
-                // Đặt giá trị ban đầu
-                let currentVolume = 1.0;
-                if (keyframes.length > 0 && keyframes[0].time === 0) {
-                    currentVolume = keyframes[0].volume;
-                } else {
-                    currentVolume = 1.0;
-                }
-                gainParam.setValueAtTime(currentVolume, startTime);
+audioFileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    try {
+      const arrayBuffer = ev.target.result;
+      audioContext = new(window.AudioContext || window.webkitAudioContext)();
+      audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      audioDuration = audioBuffer.duration;
+      audioStatus.textContent = file.name + ' (' + audioDuration.toFixed(1) + 's)';
+      showToast('✅ Đã tải audio: ' + file.name);
+      keyframes = []; keyframeCount.textContent = '0'; updateTimeline();
+    } catch (err) { showToast('❌ Lỗi tải audio: ' + err.message, true); }
+  };
+  reader.readAsArrayBuffer(file);
+});
 
-                keyframes.forEach(kf => {
-                    const t = startTime + kf.time;
-                    gainParam.linearRampToValueAtTime(kf.volume, t);
-                });
+extractVocalBtn.addEventListener('click', async () => {
+  if (!audioBuffer) { showToast('⚠️ Chưa tải audio', true); return; }
+  try {
+    showToast('⏳ Đang tách giọng...');
+    // Mô phỏng: copy buffer
+    vocalBuffer = audioBuffer;
+    vocalStatus.textContent = 'Đã tách (demo)';
+    showToast('✅ Đã tách giọng (demo)');
+  } catch (err) { showToast('❌ Lỗi tách: ' + err.message, true); }
+});
 
-                // Cuối video về 0
-                gainParam.linearRampToValueAtTime(0, startTime + duration + 0.1);
+replaceVoiceInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    try {
+      const arrayBuffer = ev.target.result;
+      const ctx = new(window.AudioContext || window.webkitAudioContext)();
+      replaceVoiceBuffer = await ctx.decodeAudioData(arrayBuffer);
+      showToast('✅ Đã tải giọng thay thế');
+    } catch (err) { showToast('❌ Lỗi tải: ' + err.message, true); }
+  };
+  reader.readAsArrayBuffer(file);
+});
 
-                sourceNode = source;
-                gainNode = gain;
-                isPlaying = true;
+replaceVoiceBtn.addEventListener('click', () => {
+  if (!replaceVoiceBuffer) { showToast('⚠️ Chưa tải giọng thay thế', true); return; }
+  if (!audioBuffer) { showToast('⚠️ Chưa có audio gốc', true); return; }
+  vocalBuffer = replaceVoiceBuffer;
+  vocalStatus.textContent = 'Đã thay giọng';
+  showToast('✅ Đã thay giọng (demo)');
+});
 
-                source.onended = () => {
-                    isPlaying = false;
-                    currentTime = 0;
-                    playhead.style.left = '0%';
-                    showToast('⏹️ Đã dừng phát');
-                };
+delaySlider.addEventListener('input', () => { delayValue.value = delaySlider.value; });
+delayValue.addEventListener('input', () => { delaySlider.value = delayValue.value; });
+syncAudioBtn.addEventListener('click', () => {
+  const delay = parseFloat(delayValue.value) / 1000;
+  showToast(`🔄 Đồng bộ delay: ${delay.toFixed(3)}s`);
+});
 
-                // Cập nhật playhead
-                function updatePlayhead() {
-                    if (!isPlaying) return;
-                    const elapsed = audioContext.currentTime - startTime;
-                    const pos = Math.min(elapsed / duration, 1) * 100;
-                    playhead.style.left = pos + '%';
-                    currentTime = elapsed;
-                    // Cập nhật volume hiển thị
-                    const vol = gainParam.value;
-                    volumeDisplay.textContent = (vol * 100).toFixed(0);
-                    requestAnimationFrame(updatePlayhead);
-                }
-                updatePlayhead();
+volumeSlider.addEventListener('input', () => {
+  volumeDisplay.textContent = volumeSlider.value;
+});
 
-                source.start(0);
-                showToast('▶️ Đang phát...');
-            } catch (err) {
-                showToast('❌ Lỗi phát: ' + err.message, true);
-            }
-        });
+addKeyframeBtn.addEventListener('click', () => {
+  if (audioDuration <= 0) { showToast('⚠️ Chưa có audio', true); return; }
+  const time = Math.min(currentTime, audioDuration);
+  const vol = parseFloat(volumeSlider.value) / 100;
+  keyframes.push({ time, volume: vol });
+  keyframes.sort((a,b) => a.time - b.time);
+  keyframeCount.textContent = keyframes.length;
+  updateTimeline();
+  showToast('➕ Đã thêm keyframe tại ' + time.toFixed(1) + 's');
+});
 
-        pauseAudioBtn.addEventListener('click', () => {
-            if (!isPlaying) return;
-            if (audioContext && audioContext.state === 'running') {
-                audioContext.suspend();
-                showToast('⏸️ Tạm dừng');
-            }
-        });
+clearKeyframesBtn.addEventListener('click', () => {
+  keyframes = []; keyframeCount.textContent = '0'; updateTimeline(); showToast('🗑️ Đã xóa keyframes');
+});
 
-        stopAudioBtn.addEventListener('click', () => {
-            if (sourceNode) {
-                try {
-                    sourceNode.stop();
-                } catch (e) {}
-                sourceNode.disconnect();
-                sourceNode = null;
-                gainNode = null;
-                isPlaying = false;
-                currentTime = 0;
-                playhead.style.left = '0%';
-                showToast('⏹️ Đã dừng');
-            }
-        });
+function updateTimeline() {
+  const track = timelineTrack;
+  track.querySelectorAll('.keyframe').forEach(el => el.remove());
+  track.querySelectorAll('.keyframe-label').forEach(el => el.remove());
+  keyframes.forEach(kf => {
+    const pos = (kf.time / audioDuration) * 100;
+    const div = document.createElement('div');
+    div.className = 'keyframe';
+    div.style.left = pos + '%';
+    div.title = kf.time.toFixed(1) + 's - ' + (kf.volume * 100).toFixed(0) + '%';
+    div.dataset.time = kf.time;
+    track.appendChild(div);
+    const label = document.createElement('div');
+    label.className = 'keyframe-label';
+    label.style.left = pos + '%';
+    label.textContent = (kf.volume * 100).toFixed(0) + '%';
+    track.appendChild(label);
+  });
+}
 
-        // Khởi tạo timeline
-        updateTimeline();
+playAudioBtn.addEventListener('click', async () => {
+  if (!audioBuffer) { showToast('⚠️ Chưa tải audio', true); return; }
+  if (isPlaying) return;
+  try {
+    if (!audioContext) audioContext = new(window.AudioContext || window.webkitAudioContext)();
+    if (audioContext.state === 'suspended') await audioContext.resume();
 
-        // ============================================================
-        //  KHỞI TẠO
-        // ============================================================
-        resizeCanvas();
-        showToast('🎬 Chào mừng! Bắt đầu thôi!');
-        console.log('🎬 Video/Audio Editor Pro sẵn sàng!');
-    </script>
+    const source = audioContext.createBufferSource();
+    source.buffer = vocalBuffer || audioBuffer;
+    const gain = audioContext.createGain();
+    source.connect(gain);
+    gain.connect(audioContext.destination);
 
+    const startTime = audioContext.currentTime;
+    const duration = source.buffer.duration;
+    const gainParam = gain.gain;
+    let currentVol = 1.0;
+    if (keyframes.length > 0 && keyframes[0].time === 0) currentVol = keyframes[0].volume;
+    else currentVol = 1.0;
+    gainParam.setValueAtTime(currentVol, startTime);
+    keyframes.forEach(kf => { gainParam.linearRampToValueAtTime(kf.volume, startTime + kf.time); });
+    gainParam.linearRampToValueAtTime(0, startTime + duration + 0.1);
+
+    sourceNode = source; gainNode = gain; isPlaying = true;
+    source.onended = () => { isPlaying = false; currentTime = 0; playhead.style.left = '0%'; showToast('⏹️ Đã dừng phát'); };
+
+    function updatePlayhead() {
+      if (!isPlaying) return;
+      const elapsed = audioContext.currentTime - startTime;
+      const pos = Math.min(elapsed / duration, 1) * 100;
+      playhead.style.left = pos + '%';
+      currentTime = elapsed;
+      const vol = gainParam.value;
+      volumeDisplay.textContent = (vol * 100).toFixed(0);
+      volumeSlider.value = vol * 100;
+      requestAnimationFrame(updatePlayhead);
+    }
+    updatePlayhead();
+    source.start(0);
+    showToast('▶️ Đang phát...');
+  } catch (err) { showToast('❌ Lỗi phát: ' + err.message, true); }
+});
+
+pauseAudioBtn.addEventListener('click', () => {
+  if (!isPlaying) return;
+  if (audioContext && audioContext.state === 'running') { audioContext.suspend(); showToast('⏸️ Tạm dừng'); }
+});
+
+stopAudioBtn.addEventListener('click', () => {
+  if (sourceNode) { try { sourceNode.stop(); } catch(e) {} sourceNode.disconnect(); sourceNode = null; gainNode = null; isPlaying = false; currentTime = 0; playhead.style.left = '0%'; showToast('⏹️ Đã dừng'); }
+});
+
+updateTimeline();
+
+// ============================================================
+//  PART 4: EXE → CODE (MÔ PHỎNG)
+// ============================================================
+const exeFileInput = document.getElementById('exeFileInput');
+const exeLangSelect = document.getElementById('exeLangSelect');
+const exeConvertBtn = document.getElementById('exeConvertBtn');
+const exeFileName = document.getElementById('exeFileName');
+const exeFileSize = document.getElementById('exeFileSize');
+const exeStatus = document.getElementById('exeStatus');
+const exeResult = document.getElementById('exeResult');
+const exeCodeBlock = document.getElementById('exeCodeBlock');
+const exeCopyBtn = document.getElementById('exeCopyBtn');
+
+let exeFileData = null;
+
+exeFileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  exeFileName.textContent = file.name;
+  exeFileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+  exeFileData = file;
+  exeStatus.textContent = 'Đã chọn file, sẵn sàng chuyển đổi';
+  exeResult.classList.remove('show');
+});
+
+function generateFakeCode(lang, fileName) {
+  const name = fileName.replace('.exe', '');
+  const samples = {
+    csharp: `// Decompiled from ${fileName} (C# .NET)\n// Sử dụng dnSpy hoặc ILSpy để decompile thực tế\n\nusing System;\nusing System.Collections.Generic;\n\nnamespace ${name} {\n    class Program {\n        static void Main(string[] args) {\n            Console.WriteLine("Hello from ${name}!");\n            // Logic chính của ứng dụng ở đây\n        }\n    }\n}`,
+    cpp: `// Decompiled from ${fileName} (C++ Native)\n// Sử dụng Ghidra hoặc IDA Pro để phân tích sâu\n\n#include <iostream>\n#include <windows.h>\n\nint main() {\n    std::cout << "Hello from ${name}!" << std::endl;\n    // Mã assembly đã được dịch sang C-like\n    return 0;\n}`,
+    python: `# Decompiled from ${fileName} (Python với PyInstaller)\n# Sử dụng pyinstxtractor + uncompyle6\n\nimport sys\n\ndef main():\n    print("Hello from ${name}!")\n    # Bytecode đã được khôi phục về Python\n\nif __name__ == "__main__":\n    main()`,
+    vb6: `' Decompiled from ${fileName} (Visual Basic 6.0)\n' Sử dụng VB Decompiler để có code chính xác hơn\n\nPrivate Sub Form_Load()\n    MsgBox "Hello from ${name}!"\nEnd Sub`,
+    java: `// Decompiled from ${fileName} (Java JAR)\n// Sử dụng JD-GUI hoặc FernFlower\n\npublic class ${name} {\n    public static void main(String[] args) {\n        System.out.println("Hello from ${name}!");\n    }\n}`
+  };
+  return samples[lang] || samples.csharp;
+}
+
+exeConvertBtn.addEventListener('click', () => {
+  if (!exeFileData) { showToast('⚠️ Chưa chọn file EXE', true); return; }
+  exeStatus.textContent = '⏳ Đang phân tích...';
+  setTimeout(() => {
+    const lang = exeLangSelect.value;
+    const code = generateFakeCode(lang, exeFileData.name);
+    exeCodeBlock.textContent = code;
+    exeResult.classList.add('show');
+    exeStatus.textContent = '✅ Đã chuyển đổi (mô phỏng)';
+    showToast('✅ Đã tạo mã nguồn dự kiến');
+  }, 800);
+});
+
+exeCopyBtn.addEventListener('click', () => {
+  const text = exeCodeBlock.textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Đã copy code')).catch(() => showToast('❌ Lỗi copy', true));
+});
+
+// ============================================================
+//  INIT
+// ============================================================
+resizeCanvas();
+showToast('🚀 Siêu Công Cụ Pro sẵn sàng!');
+console.log('🔥 Siêu Công Cụ Pro loaded.');
+</script>
 </body>
-    </html>
+                        </html>
