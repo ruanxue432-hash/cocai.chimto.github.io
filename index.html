@@ -2,8 +2,8 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberPy 3D - Interactive Python WebAssembly IDE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D Python IDE Mobile</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,318 +14,225 @@
                 extend: {
                     colors: {
                         cyber: {
-                            bg: '#05070e',
-                            panel: '#0d121f',
-                            border: '#1e293b',
+                            bg: '#090d16',
+                            card: '#111827',
+                            border: '#1f2937',
                             neon: '#00f0ff',
                             pink: '#ff0055',
-                            purple: '#7000ff',
-                            green: '#00ff66',
-                            gold: '#ffb700'
+                            accent: '#10b981'
                         }
-                    },
-                    fontFamily: {
-                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
-                        sans: ['Inter', 'sans-serif']
                     }
                 }
             }
         }
     </script>
 
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Three.js Base & Controls -->
+    <!-- Three.js Library & OrbitControls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-    <!-- Pyodide WASM Python Engine -->
+    <!-- Pyodide Python Engine (WASM) -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
 
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #05070e;
-            color: #f3f4f6;
+        * {
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
+            background-color: #090d16;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        /* Prevent zooming on iOS double tap */
+        textarea {
+            font-size: 14px !important;
         }
-        ::-webkit-scrollbar-track {
-            background: #0d121f;
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00f0ff;
-        }
-
-        .glow-neon {
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-        }
-        .glow-pink {
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-        }
-
-        /* Line Numbers Styling */
-        .line-numbers {
-            font-family: 'Fira Code', monospace;
-            user-select: none;
-        }
-
-        .editor-textarea {
-            font-family: 'Fira Code', monospace;
-            tab-size: 4;
-            white-space: pre;
-            word-break: normal;
-        }
-
-        .glass-panel {
-            background: rgba(13, 18, 31, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 240, 255, 0.15);
+            background: #374151;
+            border-radius: 2px;
         }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col relative select-none">
+<body class="flex flex-col h-screen w-screen overflow-hidden text-gray-200">
 
-    <!-- Header Navbar -->
-    <header class="h-14 bg-cyber-panel/90 border-b border-cyber-border px-4 flex items-center justify-between z-20 backdrop-blur-md">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-cyber-pink via-cyber-purple to-cyber-neon p-0.5 flex items-center justify-center">
-                <div class="w-full h-full bg-cyber-bg rounded-[7px] flex items-center justify-center">
-                    <i class="fa-brands fa-python text-cyber-neon text-lg"></i>
-                </div>
-            </div>
-            <div>
-                <h1 class="font-black text-base tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyber-neon via-white to-cyber-pink uppercase flex items-center gap-2">
-                    CYBER-PY <span class="text-[10px] px-2 py-0.5 rounded bg-cyber-neon/10 text-cyber-neon border border-cyber-neon/30">3D WASM</span>
-                </h1>
-            </div>
+    <!-- TOP HALF: ALWAYS VISIBLE 3D VIEWPORT (45% Height) -->
+    <div id="viewport-wrapper" class="relative w-full h-[45%] bg-black border-b-2 border-cyber-neon/40 shadow-lg">
+        <!-- Canvas Mounting Point -->
+        <div id="canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+        <!-- Floating Controls Badge -->
+        <div class="absolute top-2 left-2 z-10 flex items-center gap-2 bg-cyber-card/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-gray-700 text-[11px]">
+            <span class="w-2 h-2 rounded-full bg-cyber-neon animate-pulse"></span>
+            <span class="font-mono text-cyber-neon font-bold">3D VIEWPORT</span>
         </div>
 
-        <!-- Pyodide Engine Status Indicator -->
-        <div class="flex items-center gap-3">
-            <div id="pyodide-status" class="flex items-center gap-2 text-xs bg-cyber-bg/80 border border-cyber-border px-3 py-1.5 rounded-full text-gray-400">
-                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse" id="status-dot"></span>
-                <span id="status-text">Loading Python Engine...</span>
-            </div>
-
-            <button id="toggle-editor-btn" class="sm:hidden text-cyber-neon p-2 bg-cyber-bg rounded border border-cyber-border">
-                <i class="fa-solid fa-code"></i>
+        <!-- 3D Scene Action Quick Buttons -->
+        <div class="absolute top-2 right-2 z-10 flex items-center gap-1.5">
+            <button onclick="resetCamera()" class="bg-cyber-card/80 hover:bg-gray-800 text-xs text-gray-300 p-2 rounded-lg border border-gray-700 shadow" title="Reset View">
+                <i class="fa-solid fa-camera-rotate"></i>
+            </button>
+            <button onclick="clear3DScene()" class="bg-cyber-card/80 hover:bg-red-950 text-xs text-red-400 p-2 rounded-lg border border-red-800/50 shadow" title="Clear Scene">
+                <i class="fa-solid fa-trash-can"></i>
             </button>
         </div>
-    </header>
 
-    <!-- Main Workspace Container -->
-    <div class="flex-1 relative flex overflow-hidden">
+        <!-- Swipe Helper Hint -->
+        <div class="absolute bottom-1 left-2 z-10 text-[10px] text-gray-400 bg-black/60 px-2 py-0.5 rounded pointer-events-none">
+            <i class="fa-solid fa-hand-pointer mr-1 text-cyber-neon"></i> Drag to rotate / Pinch to zoom
+        </div>
+    </div>
+
+    <!-- BOTTOM HALF: EDITOR & TERMINAL (55% Height) -->
+    <div class="flex-1 flex flex-col w-full bg-cyber-bg overflow-hidden">
         
-        <!-- 3D Canvas Background -->
-        <div id="canvas-container" class="absolute inset-0 z-0 cursor-grab active:cursor-grabbing"></div>
+        <!-- Controls Bar -->
+        <div class="h-12 bg-cyber-card border-b border-gray-800 px-3 flex items-center justify-between z-10">
+            <!-- Pyodide Engine Load Status -->
+            <div id="status-indicator" class="flex items-center gap-2 text-xs font-mono text-amber-400 bg-black/40 px-2.5 py-1 rounded-lg border border-gray-800">
+                <i class="fa-solid fa-circle-notch fa-spin text-amber-400" id="status-icon"></i>
+                <span id="status-text">Loading Python...</span>
+            </div>
 
-        <!-- Floating Quick Preset Controls overlay top-left -->
-        <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2 pointer-events-auto max-w-[calc(100%-20px)] sm:max-w-md">
-            <button onclick="loadExample('matrix')" class="px-3 py-1.5 rounded-lg glass-panel text-xs text-cyber-neon border border-cyber-neon/30 hover:bg-cyber-neon/20 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-cubes"></i> Cube Matrix
-            </button>
-            <button onclick="loadExample('rainbow')" class="px-3 py-1.5 rounded-lg glass-panel text-xs text-cyber-pink border border-cyber-pink/30 hover:bg-cyber-pink/20 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> Rainbow Orbit
-            </button>
-            <button onclick="loadExample('wave')" class="px-3 py-1.5 rounded-lg glass-panel text-xs text-cyber-gold border border-cyber-gold/30 hover:bg-cyber-gold/20 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-wave-square"></i> Wave Mesh
+            <!-- Preset Samples Dropdown -->
+            <select id="preset-select" onchange="loadPreset(this.value)" class="bg-gray-900 border border-gray-700 text-xs text-cyber-neon rounded-lg px-2 py-1.5 focus:outline-none">
+                <option value="matrix">Preset: Cube Grid</option>
+                <option value="ring">Preset: Saturn Rings</option>
+                <option value="wave">Preset: 3D Wave Grid</option>
+            </select>
+
+            <!-- Prominent RUN Button -->
+            <button id="run-btn" disabled onclick="runPythonCode()" class="bg-gradient-to-r from-emerald-500 to-cyber-accent text-gray-950 font-bold px-4 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-900/40 opacity-50 cursor-not-allowed transition active:scale-95">
+                <i class="fa-solid fa-play"></i> RUN
             </button>
         </div>
 
-        <!-- Floating Sidebar Code Editor & Terminal Panel -->
-        <aside id="editor-panel" class="absolute top-0 right-0 h-full w-full sm:w-[500px] md:w-[580px] glass-panel border-l border-cyber-border z-10 flex flex-col transition-transform duration-300">
+        <!-- Tab Bar -->
+        <div class="flex bg-gray-900/80 border-b border-gray-800 text-xs font-mono">
+            <button id="tab-code-btn" onclick="switchTab('code')" class="flex-1 py-2 text-center text-cyber-neon border-b-2 border-cyber-neon bg-cyber-card font-bold">
+                <i class="fa-solid fa-code mr-1"></i> script.py
+            </button>
+            <button id="tab-term-btn" onclick="switchTab('terminal')" class="flex-1 py-2 text-center text-gray-400 border-b-2 border-transparent">
+                <i class="fa-solid fa-terminal mr-1"></i> Terminal (<span id="term-count">0</span>)
+            </button>
+        </div>
+
+        <!-- Tab Contents Wrapper -->
+        <div class="flex-1 relative overflow-hidden">
             
-            <!-- Editor Toolbar -->
-            <div class="h-11 bg-cyber-panel/90 border-b border-cyber-border px-4 flex items-center justify-between">
-                <div class="flex items-center gap-2 text-xs font-mono text-gray-300">
-                    <i class="fa-solid fa-code text-cyber-neon"></i>
-                    <span>script.py</span>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <button id="clear-scene-btn" class="px-2.5 py-1 text-xs rounded bg-cyber-bg border border-cyber-border text-gray-400 hover:text-white hover:border-gray-500 transition" title="Clear 3D Scene">
-                        <i class="fa-solid fa-trash-can"></i> Clear 3D
-                    </button>
-                    
-                    <button id="run-btn" disabled class="px-4 py-1 text-xs font-bold rounded bg-cyber-neon text-cyber-bg hover:bg-cyan-300 transition flex items-center gap-1.5 glow-neon disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-play"></i> RUN SCRIPT
-                    </button>
-                </div>
-            </div>
-
-            <!-- Code Editor Area -->
-            <div class="flex-1 flex relative overflow-hidden bg-cyber-bg/90 font-mono text-sm">
+            <!-- CODE EDITOR TAB -->
+            <div id="tab-code" class="absolute inset-0 flex">
                 <!-- Line Numbers -->
-                <div id="line-numbers" class="w-12 py-3 px-1 text-right text-gray-600 bg-cyber-panel/40 border-r border-cyber-border/40 select-none text-xs leading-6">
+                <div id="line-numbers" class="w-9 py-2 bg-gray-950 text-right pr-2 text-gray-600 font-mono text-xs select-none border-r border-gray-800 leading-6">
                     1
                 </div>
-
-                <!-- Textarea Editor -->
-                <textarea id="code-editor" class="flex-1 py-3 px-3 bg-transparent text-cyber-neon editor-textarea focus:outline-none resize-none leading-6 text-xs sm:text-sm" spellcheck="false" placeholder="# Write Python code here..."></textarea>
+                <!-- Editor Textarea -->
+                <textarea id="code-editor" class="flex-1 bg-cyber-bg p-2 text-cyber-neon font-mono text-xs leading-6 resize-none focus:outline-none" spellcheck="false" placeholder="# Type Python code..."></textarea>
             </div>
 
-            <!-- Console Output Terminal -->
-            <div class="h-44 sm:h-52 bg-black/90 border-t border-cyber-border flex flex-col font-mono text-xs">
-                <div class="h-8 bg-cyber-panel/80 px-3 border-b border-cyber-border/50 flex items-center justify-between text-gray-400">
-                    <span class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold">
-                        <i class="fa-solid fa-terminal text-cyber-green"></i> Python Terminal Stdout
-                    </span>
-                    <button id="clear-console-btn" class="hover:text-white text-[10px]">Clear Output</button>
+            <!-- TERMINAL TAB -->
+            <div id="tab-terminal" class="absolute inset-0 bg-black p-3 font-mono text-xs overflow-y-auto hidden">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1 mb-2 text-gray-500">
+                    <span>Python Stdout Log</span>
+                    <button onclick="clearTerminal()" class="text-gray-400 hover:text-white text-[10px]">
+                        <i class="fa-solid fa-ban"></i> Clear
+                    </button>
                 </div>
-                
-                <div id="console-output" class="flex-1 p-3 overflow-y-auto space-y-1 text-gray-300 leading-relaxed select-text">
-                    <div class="text-gray-500">// Terminal output will appear here...</div>
+                <div id="terminal-output" class="space-y-1 text-gray-300">
+                    <div class="text-gray-600">// Execution output will be printed here...</div>
                 </div>
             </div>
-        </aside>
+
+        </div>
 
     </div>
 
-    <!-- MAIN JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- 1. THREE.JS 3D SCENE SETUP ---
         let scene, camera, renderer, controls;
-        let pyObjects = []; // Stores meshes created by user scripts
-        let mainCoreMesh = null;
-        let particleSystem = null;
-        let sceneLights = {};
+        let createdMeshes = [];
+        let defaultCube = null;
 
         function init3D() {
             const container = document.getElementById('canvas-container');
 
-            // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x05070e);
-            scene.fog = new THREE.FogExp2(0x05070e, 0.03);
+            scene.background = new THREE.Color(0x090d16);
 
-            // Camera
-            camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 5, 12);
+            camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 4, 8);
 
-            // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
-            // Orbit Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.maxDistance = 50;
+            controls.dampingFactor = 0.08;
 
             // Grid Floor
-            const gridHelper = new THREE.GridHelper(30, 30, 0x00f0ff, 0x1e293b);
-            gridHelper.position.y = -2;
-            scene.add(gridHelper);
+            const grid = new THREE.GridHelper(20, 20, 0x00f0ff, 0x1f2937);
+            grid.position.y = -1;
+            scene.add(grid);
 
-            // Lights
-            sceneLights.ambient = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(sceneLights.ambient);
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
 
-            sceneLights.neonPoint = new THREE.PointLight(0x00f0ff, 3, 20);
-            sceneLights.neonPoint.position.set(0, 4, 0);
-            scene.add(sceneLights.neonPoint);
+            const dirLight = new THREE.DirectionalLight(0x00f0ff, 1.5);
+            dirLight.position.set(5, 10, 7);
+            scene.add(dirLight);
 
-            sceneLights.pinkPoint = new THREE.PointLight(0xff0055, 3, 20);
-            sceneLights.pinkPoint.position.set(-5, -1, 3);
-            scene.add(sceneLights.pinkPoint);
+            const pointLight = new THREE.PointLight(0xff0055, 2, 20);
+            pointLight.position.set(-5, 2, -5);
+            scene.add(pointLight);
 
-            // Central Cyber Core Mesh
-            createCentralCore();
+            // Default Center Shape
+            const geo = new THREE.IcosahedronGeometry(1, 0);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, wireframe: true });
+            defaultCube = new THREE.Mesh(geo, mat);
+            scene.add(defaultCube);
 
-            // Background Ambient Particles
-            createCyberParticles();
-
-            // Resize Event
+            // Handle Resize
             window.addEventListener('resize', onWindowResize);
-        }
-
-        function createCentralCore() {
-            const group = new THREE.Group();
-
-            const geo = new THREE.IcosahedronGeometry(1.5, 0);
-            const mat = new THREE.MeshStandardMaterial({
-                color: 0x00f0ff,
-                wireframe: true,
-                emissive: 0x00f0ff,
-                emissiveIntensity: 0.5
-            });
-
-            mainCoreMesh = new THREE.Mesh(geo, mat);
-            group.add(mainCoreMesh);
-
-            const innerGeo = new THREE.OctahedronGeometry(0.8, 0);
-            const innerMat = new THREE.MeshBasicMaterial({ color: 0xff0055, wireframe: true });
-            const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-            group.add(innerMesh);
-
-            group.position.y = 1;
-            scene.add(group);
-        }
-
-        function createCyberParticles() {
-            const particleCount = 150;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 40;
-                positions[i + 1] = Math.random() * 20 - 2;
-                positions[i + 2] = (Math.random() - 0.5) * 40;
-            }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-            const material = new THREE.PointsMaterial({
-                color: 0x00f0ff,
-                size: 0.08,
-                transparent: true,
-                opacity: 0.6
-            });
-
-            particleSystem = new THREE.Points(geometry, material);
-            scene.add(particleSystem);
         }
 
         function onWindowResize() {
             const container = document.getElementById('canvas-container');
+            if (!container) return;
             camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(container.clientWidth, container.clientHeight);
         }
 
-        let rotationSpeed = 0.01;
-        function animate() {
-            requestAnimationFrame(animate);
+        function animate3D() {
+            requestAnimationFrame(animate3D);
 
-            if (mainCoreMesh) {
-                mainCoreMesh.rotation.x += rotationSpeed;
-                mainCoreMesh.rotation.y += rotationSpeed * 1.5;
+            if (defaultCube) {
+                defaultCube.rotation.x += 0.005;
+                defaultCube.rotation.y += 0.01;
             }
 
-            if (particleSystem) {
-                particleSystem.rotation.y += 0.0005;
-            }
-
-            // Animate user created meshes if marked for animation
-            pyObjects.forEach(obj => {
-                if (obj.userData && obj.userData.autoRotate) {
-                    obj.rotation.x += 0.01;
-                    obj.rotation.y += 0.02;
+            createdMeshes.forEach(mesh => {
+                if (mesh.userData && mesh.userData.spin) {
+                    mesh.rotation.x += 0.01;
+                    mesh.rotation.y += 0.02;
                 }
             });
 
@@ -333,12 +240,20 @@
             renderer.render(scene, camera);
         }
 
-        // --- 2. PYTHON ENGINE (PYODIDE WASM) INTEGRATION & BINDINGS ---
-        let pyodide = null;
+        function resetCamera() {
+            camera.position.set(0, 4, 8);
+            controls.target.set(0, 0, 0);
+        }
 
-        // Exposed JavaScript functions accessible directly inside Python
-        window.cyber3D = {
-            spawnCube: function(x, y, z, colorHex = '#00f0ff', size = 1) {
+        function clear3DScene() {
+            createdMeshes.forEach(m => scene.remove(m));
+            createdMeshes = [];
+            appendTerminal("System: Cleared 3D Scene objects.", "sys");
+        }
+
+        // --- 2. PYTHON API BRIDGE (Exposed to Python via Pyodide) ---
+        window.py3D = {
+            addCube: function(x, y, z, colorHex = '#00f0ff', size = 0.8) {
                 const geo = new THREE.BoxGeometry(size, size, size);
                 const mat = new THREE.MeshStandardMaterial({
                     color: new THREE.Color(colorHex),
@@ -347,13 +262,13 @@
                 });
                 const mesh = new THREE.Mesh(geo, mat);
                 mesh.position.set(x, y, z);
-                mesh.userData.autoRotate = true;
+                mesh.userData.spin = true;
                 scene.add(mesh);
-                pyObjects.push(mesh);
-                return pyObjects.length - 1;
+                createdMeshes.push(mesh);
+                return createdMeshes.length;
             },
 
-            spawnSphere: function(x, y, z, colorHex = '#ff0055', radius = 0.6) {
+            addSphere: function(x, y, z, colorHex = '#ff0055', radius = 0.5) {
                 const geo = new THREE.SphereGeometry(radius, 16, 16);
                 const mat = new THREE.MeshStandardMaterial({
                     color: new THREE.Color(colorHex),
@@ -361,242 +276,220 @@
                 });
                 const mesh = new THREE.Mesh(geo, mat);
                 mesh.position.set(x, y, z);
-                mesh.userData.autoRotate = true;
+                mesh.userData.spin = true;
                 scene.add(mesh);
-                pyObjects.push(mesh);
-                return pyObjects.length - 1;
+                createdMeshes.push(mesh);
+                return createdMeshes.length;
             },
 
             setCoreColor: function(colorHex) {
-                if (mainCoreMesh) {
-                    mainCoreMesh.material.color.set(colorHex);
-                    mainCoreMesh.material.emissive.set(colorHex);
-                }
-            },
-
-            setRotationSpeed: function(speed) {
-                rotationSpeed = parseFloat(speed);
-            },
-
-            setLightColor: function(lightName, colorHex) {
-                if (sceneLights[lightName]) {
-                    sceneLights[lightName].color.set(colorHex);
+                if (defaultCube) {
+                    defaultCube.material.color.set(colorHex);
                 }
             },
 
             clearScene: function() {
-                pyObjects.forEach(obj => scene.remove(obj));
-                pyObjects = [];
+                clear3DScene();
             }
         };
 
-        async function initPyodideEngine() {
+        // --- 3. PYODIDE WASM ENGINE INITIALIZATION ---
+        let pyodide = null;
+
+        async function initPythonEngine() {
+            const statusIndicator = document.getElementById('status-indicator');
+            const statusIcon = document.getElementById('status-icon');
             const statusText = document.getElementById('status-text');
-            const statusDot = document.getElementById('status-dot');
             const runBtn = document.getElementById('run-btn');
 
             try {
                 pyodide = await loadPyodide();
-                
-                // Redirect Python stdout/stderr to our custom terminal
+
+                // Intercept stdout
                 pyodide.setStdout({
-                    write: (str) => appendConsole(str, 'stdout')
+                    write: (text) => appendTerminal(text, 'stdout')
                 });
                 pyodide.setStderr({
-                    write: (str) => appendConsole(str, 'stderr')
+                    write: (text) => appendTerminal(text, 'stderr')
                 });
 
-                // Inject initial Python helper wrapper module
+                // Define Python API wrapper functions
                 await pyodide.runPythonAsync(`
 import js
 
-def spawn_cube(x=0, y=0, z=0, color='#00f0ff', size=1):
-    return js.cyber3D.spawnCube(x, y, z, color, size)
+def add_cube(x=0, y=0, z=0, color='#00f0ff', size=0.8):
+    return js.py3D.addCube(x, y, z, color, size)
 
-def spawn_sphere(x=0, y=0, z=0, color='#ff0055', radius=0.6):
-    return js.cyber3D.spawnSphere(x, y, z, color, radius)
+def add_sphere(x=0, y=0, z=0, color='#ff0055', radius=0.5):
+    return js.py3D.addSphere(x, y, z, color, radius)
 
 def set_color(color_hex):
-    js.cyber3D.setCoreColor(color_hex)
+    js.py3D.setCoreColor(color_hex)
 
-def set_rotation_speed(speed):
-    js.cyber3D.setRotationSpeed(speed)
-
-def set_light(light_name, color_hex):
-    js.cyber3D.setLightColor(light_name, color_hex)
-
-def clear_scene():
-    js.cyber3D.clearScene()
+def clear():
+    js.py3D.clearScene()
 `);
 
-                statusText.innerText = "Python 3.11 WASM Ready";
-                statusText.classList.remove('text-gray-400');
-                statusText.classList.add('text-cyber-neon');
-                statusDot.classList.remove('bg-amber-500');
-                statusDot.classList.add('bg-cyber-neon');
-                runBtn.disabled = false;
+                // Update Status UI
+                statusIndicator.className = "flex items-center gap-1.5 text-xs font-mono text-emerald-400 bg-emerald-950/40 px-2.5 py-1 rounded-lg border border-emerald-800";
+                statusIcon.className = "fa-solid fa-check text-emerald-400";
+                statusText.innerText = "Python Ready";
 
-                appendConsole("System: Python Engine initialized successfully.", "system");
+                runBtn.disabled = false;
+                runBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                appendTerminal("System: Pyodide WASM Python 3.11 ready!", "sys");
 
             } catch (err) {
-                statusText.innerText = "Engine Error";
-                statusDot.classList.remove('bg-amber-500');
-                statusDot.classList.add('bg-red-500');
-                appendConsole("Engine Load Error: " + err.message, "stderr");
+                statusIndicator.className = "flex items-center gap-1.5 text-xs font-mono text-red-400 bg-red-950/40 px-2.5 py-1 rounded-lg border border-red-800";
+                statusIcon.className = "fa-solid fa-triangle-exclamation text-red-400";
+                statusText.innerText = "Pyodide Error";
+                appendTerminal("Engine Error: " + err.message, "stderr");
             }
         }
 
-        // --- 3. EDITOR & TERMINAL UI CONTROLS ---
-        const codeEditor = document.getElementById('code-editor');
-        const lineNumbers = document.getElementById('line-numbers');
-        const consoleOutput = document.getElementById('console-output');
+        // --- 4. EDITOR & TERMINAL UI CONTROLS ---
+        const editor = document.getElementById('code-editor');
+        const lineNums = document.getElementById('line-numbers');
+        const terminal = document.getElementById('terminal-output');
+        let termLogCount = 0;
 
-        // Line Numbers Auto-Update
-        function updateLineNumbers() {
-            const lines = codeEditor.value.split('\n').length;
-            lineNumbers.innerHTML = Array.from({ length: lines }, (_, i) => i + 1).join('<br>');
+        function updateLines() {
+            const count = editor.value.split('\n').length;
+            lineNums.innerHTML = Array.from({ length: count }, (_, i) => i + 1).join('<br>');
         }
+        editor.addEventListener('input', updateLines);
 
-        codeEditor.addEventListener('input', updateLineNumbers);
+        function appendTerminal(msg, type = 'stdout') {
+            if (!msg.trim() && type === 'stdout') return;
 
-        // Handle Tab key in Textarea
-        codeEditor.addEventListener('keydown', (e) => {
-            if (e.key === 'Tab') {
-                e.preventDefault();
-                const start = codeEditor.selectionStart;
-                const end = codeEditor.selectionEnd;
-                codeEditor.value = codeEditor.value.substring(0, start) + "    " + codeEditor.value.substring(end);
-                codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
-                updateLineNumbers();
-            }
-        });
+            termLogCount++;
+            document.getElementById('term-count').innerText = termLogCount;
 
-        function appendConsole(text, type = 'stdout') {
-            if (!text.trim() && type === 'stdout') return;
             const div = document.createElement('div');
-            
             if (type === 'stderr') {
-                div.className = 'text-red-400 font-mono text-xs';
-            } else if (type === 'system') {
-                div.className = 'text-cyber-neon font-mono text-xs italic';
+                div.className = "text-red-400 font-mono text-xs";
+            } else if (type === 'sys') {
+                div.className = "text-cyber-neon font-mono text-xs italic";
             } else {
-                div.className = 'text-gray-300 font-mono text-xs';
+                div.className = "text-gray-200 font-mono text-xs";
             }
-            
-            div.innerText = text;
-            consoleOutput.appendChild(div);
-            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+
+            div.innerText = msg;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
         }
 
-        document.getElementById('clear-console-btn').addEventListener('click', () => {
-            consoleOutput.innerHTML = '';
-        });
+        function clearTerminal() {
+            terminal.innerHTML = '';
+            termLogCount = 0;
+            document.getElementById('term-count').innerText = '0';
+        }
 
-        document.getElementById('clear-scene-btn').addEventListener('click', () => {
-            window.cyber3D.clearScene();
-            appendConsole("System: 3D Scene cleared.", "system");
-        });
-
-        // Run Python Script Execution
-        document.getElementById('run-btn').addEventListener('click', async () => {
+        async function runPythonCode() {
             if (!pyodide) return;
-            
-            const code = codeEditor.value;
-            appendConsole(`>>> Executing Python script...`, "system");
+
+            const code = editor.value;
+            appendTerminal(">>> Executing script...", "sys");
 
             try {
                 await pyodide.runPythonAsync(code);
-                appendConsole(`<<< Script finished execution.`, "system");
+                appendTerminal("<<< Execution finished.", "sys");
             } catch (err) {
-                appendConsole(err.message, "stderr");
+                appendTerminal(err.message, "stderr");
+                switchTab('terminal'); // Auto-switch to terminal on error
             }
-        });
+        }
 
-        // Preset Examples
-        const examples = {
-            matrix: `# Python 3D Cube Matrix Generator
-clear_scene()
+        function switchTab(tab) {
+            const codeTab = document.getElementById('tab-code');
+            const termTab = document.getElementById('tab-terminal');
+            const codeBtn = document.getElementById('tab-code-btn');
+            const termBtn = document.getElementById('tab-term-btn');
+
+            if (tab === 'code') {
+                codeTab.classList.remove('hidden');
+                termTab.classList.add('hidden');
+                codeBtn.className = "flex-1 py-2 text-center text-cyber-neon border-b-2 border-cyber-neon bg-cyber-card font-bold";
+                termBtn.className = "flex-1 py-2 text-center text-gray-400 border-b-2 border-transparent";
+            } else {
+                codeTab.classList.add('hidden');
+                termTab.classList.remove('hidden');
+                termBtn.className = "flex-1 py-2 text-center text-cyber-neon border-b-2 border-cyber-neon bg-cyber-card font-bold";
+                codeBtn.className = "flex-1 py-2 text-center text-gray-400 border-b-2 border-transparent";
+            }
+        }
+
+        // --- 5. PRESETS ---
+        const presets = {
+            matrix: `# Python 3D Cube Grid Generator
+clear()
 set_color("#00f0ff")
-set_rotation_speed(0.02)
 
-print("Building 3D Cube Grid...")
-colors = ["#00f0ff", "#ff0055", "#7000ff", "#ffb700"]
+print("Spawning 3D Matrix...")
+colors = ["#00f0ff", "#ff0055", "#10b981", "#f59e0b"]
 
 count = 0
 for x in range(-2, 3, 2):
     for z in range(-2, 3, 2):
-        if x == 0 and z == 0:
-            continue
+        if x == 0 and z == 0: continue
         c = colors[count % len(colors)]
-        spawn_cube(x, 0, z, color=c, size=0.8)
+        add_cube(x, 0, z, color=c, size=0.7)
         count += 1
 
-print(f"Spawned {count} interactive cubes!")`,
+print(f"Created {count} cubes in 3D scene!")`,
 
-            rainbow: `# Rainbow Sphere Orbit Simulation
+            ring: `# Saturn Ring Orbits
 import math
 
-clear_scene()
+clear()
 set_color("#ff0055")
-set_rotation_speed(0.05)
 
-print("Deploying Orbital Spheres...")
-total_spheres = 12
-radius = 4
+print("Building orbital ring...")
+num_spheres = 12
+radius = 3.5
 
-for i in range(total_spheres):
-    angle = (i / total_spheres) * 2 * math.pi
+for i in range(num_spheres):
+    angle = (i / num_spheres) * 2 * math.pi
     x = math.cos(angle) * radius
     z = math.sin(angle) * radius
-    
-    # Alternate heights
-    y = math.sin(i) * 1.5
-    
-    spawn_sphere(x, y, z, color="#00f0ff", radius=0.4)
+    y = math.sin(i) * 0.8
+    add_sphere(x, y, z, color="#00f0ff", radius=0.35)
 
-print("Orbital spheres active.")`,
+print("Ring created!")`,
 
-            wave: `# Futuristic Wave Pattern
+            wave: `# 3D Math Wave Surface
 import math
 
-clear_scene()
-set_color("#7000ff")
-set_rotation_speed(0.005)
+clear()
+set_color("#10b981")
 
-print("Generating 3D Wave Grid...")
-grid_size = 5
-
-for x in range(-grid_size, grid_size + 1):
-    for z in range(-grid_size, grid_size + 1):
+print("Generating 3D Wave...")
+for x in range(-3, 4):
+    for z in range(-3, 4):
         dist = math.sqrt(x**2 + z**2)
-        y = math.sin(dist * 0.8) * 1.2
-        
-        color = "#00ff66" if y > 0 else "#ff0055"
-        spawn_cube(x * 1.2, y, z * 1.2, color=color, size=0.4)
+        y = math.sin(dist * 1.2) * 0.8
+        color = "#00f0ff" if y > 0 else "#ff0055"
+        add_cube(x * 0.9, y, z * 0.9, color=color, size=0.4)
 
-print("Wave grid generated successfully!")`
+print("Wave grid generated!")`
         };
 
-        window.loadExample = function(name) {
-            if (examples[name]) {
-                codeEditor.value = examples[name];
-                updateLineNumbers();
+        function loadPreset(key) {
+            if (presets[key]) {
+                editor.value = presets[key];
+                updateLines();
             }
-        };
+        }
 
-        // Mobile panel toggle
-        document.getElementById('toggle-editor-btn').addEventListener('click', () => {
-            const panel = document.getElementById('editor-panel');
-            panel.classList.toggle('translate-x-full');
-        });
-
-        // Initialize App on Window Load
+        // --- INITIALIZATION ON LOAD ---
         window.onload = () => {
             init3D();
-            animate();
-            loadExample('matrix');
-            initPyodideEngine();
+            animate3D();
+            loadPreset('matrix');
+            initPythonEngine();
         };
     </script>
 </body>
-  </html>
+</html>
+
