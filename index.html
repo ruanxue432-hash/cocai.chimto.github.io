@@ -1,2 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberPy 3D - Interactive Python WebAssembly IDE</title>
 
-<!DOCTYPE html><html lang="vi" class="antialiased"><head><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="NOIR"><meta property="og:image" content="https://hds-1b2tcqpl05vw-6014-u3phl.grok-code-wild.hades-www.grok-sandbox.com/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><link rel="preload" as="image" href="/games/lienquan-cover.jpg"/><link rel="preload" as="image" href="/games/freefire-cover.jpg"/><link rel="preload" as="image" href="/games/roblox-cover.jpg"/><link rel="preload" as="image" href="/games/lienquan.jpg"/><link rel="preload" as="image" href="/games/freefire.jpg"/><link rel="preload" as="image" href="/games/roblox.jpg"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" data-precedence="default"/><link rel="stylesheet" href="/src/styles.css" data-precedence="default"/><link rel="stylesheet" href="/@tanstack-start/styles.css?routes=__root__%2C%2F" data-tanstack-router-dev-styles="true" data-precedence="default"/><title>NOIR</title><meta name="description" content="NOIR — cổng tải Liên Quân, Free Fire và Roblox. Nền đen, chuyển động cinematic."/><meta name="theme-color" content="#050506"/><link rel="modulepreload" href="/@id/virtual:tanstack-start-dev-client-entry"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/><link rel="manifest" href="/__grok/manifest.webmanifest"/><link rel="apple-touch-icon" href="/__grok/icon-180.png"/><meta name="apple-mobile-web-app-title" content="NOIR"><meta name="apple-mobile-web-app-status-bar-style" content="black"><script src="https://grok.com/grok-app-builder/extensions.js" defer></script></head><body class="bg-bg text-fg"><!--$--><div class="relative min-h-dvh bg-bg text-fg"><div class="pointer-events-none fixed inset-0 z-0" aria-hidden="true"><div class="absolute inset-0 bg-bg"></div><div class="pointer-glow absolute inset-0"></div><canvas class="absolute inset-0 h-full w-full"></canvas><div class="grain absolute inset-0"></div></div><header class="fixed inset-x-0 top-0 z-40 transition-[background-color,box-shadow] duration-[var(--motion-fast)] ease-[var(--ease-out)] bg-transparent"><div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-6"><a href="#top" class="font-display text-sm font-semibold tracking-[-0.04em] text-fg sm:text-base">NOIR</a><nav class="flex items-center gap-1 sm:gap-2" aria-label="Mục game"><a href="#lien-quan" class="inline-flex h-10 items-center rounded-md px-2.5 text-xs font-medium text-muted transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)] hover:text-fg sm:px-3 sm:text-sm">Liên Quân</a><a href="#free-fire" class="inline-flex h-10 items-center rounded-md px-2.5 text-xs font-medium text-muted transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)] hover:text-fg sm:px-3 sm:text-sm">Free Fire</a><a href="#roblox" class="inline-flex h-10 items-center rounded-md px-2.5 text-xs font-medium text-muted transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)] hover:text-fg sm:px-3 sm:text-sm">Roblox</a></nav></div></header><main><section id="top" class="relative z-10 flex min-h-[100dvh] flex-col justify-end px-4 pb-16 pt-28 sm:px-6 sm:pb-20"><div class="mx-auto w-full max-w-6xl"><div class="reveal"><p class="mb-5 text-[0.7rem] font-medium uppercase tracking-[0.28em] text-muted sm:text-xs">Cổng tải</p></div><div class="reveal reveal-d1"><h1 class="hero-title font-display text-fg">NOIR</h1></div><div class="reveal reveal-d2"><p class="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">Liên Quân · Free Fire · Roblox — kho tải nền đen, chuyển động thật, mở liên kết gốc từng gói.</p></div><div class="reveal reveal-d3"><a href="#kho" class="mt-10 inline-flex h-12 items-center gap-2 rounded-md bg-accent px-5 text-sm font-medium text-accent-fg transition-transform duration-150 ease-out active:scale-[0.96]">Vào kho<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down size-4" aria-hidden="true"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg></a></div></div></section><section id="kho" class="relative z-10 px-4 pb-8 sm:px-6 sm:pb-12"><div class="mx-auto grid w-full max-w-6xl gap-4 md:grid-cols-3"><div class="reveal reveal-d1"><a href="#lien-quan" class="tilt-frame group relative block overflow-hidden rounded-2xl min-h-[22rem] sm:min-h-[26rem]"><img src="/games/lienquan-cover.jpg" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-out)] group-hover:scale-[1.04]"/><div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/35 to-bg/10"></div><div class="light-sweep absolute inset-0 mix-blend-overlay"></div><div class="absolute inset-x-0 bottom-0 p-5 sm:p-6"><p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-muted">Arena of Valor</p><h2 class="mt-1 font-display text-2xl font-semibold tracking-[-0.04em] text-fg sm:text-3xl">Liên Quân</h2><p class="mt-2 max-w-[16rem] text-sm leading-relaxed text-muted">4<!-- --> gói tải</p></div></a></div><div class="reveal reveal-d2"><a href="#free-fire" class="tilt-frame group relative block overflow-hidden rounded-2xl min-h-[22rem] sm:min-h-[26rem]"><img src="/games/freefire-cover.jpg" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-out)] group-hover:scale-[1.04]"/><div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/35 to-bg/10"></div><div class="light-sweep absolute inset-0 mix-blend-overlay"></div><div class="absolute inset-x-0 bottom-0 p-5 sm:p-6"><p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-muted">Garena FF</p><h2 class="mt-1 font-display text-2xl font-semibold tracking-[-0.04em] text-fg sm:text-3xl">Free Fire</h2><p class="mt-2 max-w-[16rem] text-sm leading-relaxed text-muted">5<!-- --> gói tải</p></div></a></div><div class="reveal reveal-d3"><a href="#roblox" class="tilt-frame group relative block overflow-hidden rounded-2xl min-h-[22rem] sm:min-h-[26rem]"><img src="/games/roblox-cover.jpg" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-out)] group-hover:scale-[1.04]"/><div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/35 to-bg/10"></div><div class="light-sweep absolute inset-0 mix-blend-overlay"></div><div class="absolute inset-x-0 bottom-0 p-5 sm:p-6"><p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-muted">VNG &amp; Global</p><h2 class="mt-1 font-display text-2xl font-semibold tracking-[-0.04em] text-fg sm:text-3xl">Roblox</h2><p class="mt-2 max-w-[16rem] text-sm leading-relaxed text-muted">7<!-- --> gói tải</p></div></a></div></div></section><section id="lien-quan" class="relative z-10 scroll-mt-20 px-4 py-16 sm:px-6 sm:py-24"><div class="mx-auto w-full max-w-6xl"><div class="reveal"><div class="relative overflow-hidden rounded-2xl"><div class="relative aspect-[16/7] min-h-[12rem] sm:min-h-[16rem]"><img src="/games/lienquan-cover.jpg" alt="" class="absolute inset-0 h-full w-full object-cover"/><div class="absolute inset-0 bg-gradient-to-r from-bg via-bg/55 to-bg/20"></div><div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent"></div><div class="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-8"><div class="flex items-end gap-4"><img src="/games/lienquan.jpg" alt="" class="hidden h-16 w-28 rounded-md object-cover sm:block"/><div><p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-muted">Arena of Valor</p><h2 class="mt-1 font-display text-3xl font-semibold tracking-[-0.045em] text-fg sm:text-5xl">Liên Quân</h2><p class="mt-3 max-w-lg text-sm leading-relaxed text-muted sm:text-base">Kho công cụ tăng tốc và mod trang phục cho Liên Quân Mobile — chọn gói, mở liên kết, cài theo hướng dẫn của từng app.</p></div></div><a href="https://lienquan.garena.vn/" target="_blank" rel="noreferrer noopener" class="inline-flex h-11 shrink-0 items-center gap-2 rounded-md px-4 text-sm font-medium text-fg shadow-[var(--shadow-border)] transition-[box-shadow,transform] duration-[var(--motion-quick)] ease-[var(--ease-out)] hover:shadow-[var(--shadow-border-hover)] active:scale-[0.96]">Trang chủ<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div></div></div><div class="reveal reveal-d1"><div class="mt-5 flex flex-wrap gap-2"><a href="https://lienquan.garena.vn/hoc-vien/tuong-skin/" target="_blank" rel="noreferrer noopener" class="inline-flex h-10 items-center rounded-md px-3 text-sm text-muted shadow-[var(--shadow-border)] transition-colors duration-[var(--motion-quick)] hover:text-fg">Học viện tướng &amp; skin</a><a href="https://lienquan.garena.vn/hoc-vien/tuong-skin/d/florentino/" target="_blank" rel="noreferrer noopener" class="inline-flex h-10 items-center rounded-md px-3 text-sm text-muted shadow-[var(--shadow-border)] transition-colors duration-[var(--motion-quick)] hover:text-fg">Florentino</a></div></div><div class="mt-8 grid gap-3"><div class="reveal reveal-d1"><a href="https://play.google.com/store/apps/details?id=com.modaov.turbogamebooster" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">01</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Turbo Game Booster</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Tăng tốc &amp; tối ưu AOV</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Play Store</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d2"><a href="https://play.google.com/store/apps/details?id=com.prozmodskin.app" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">02</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Proz Mod Skin</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Mod trang phục AOV Pro</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Play Store</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d3"><a href="https://play.google.com/store/apps/details?id=com.zmodskin.app" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">03</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">ZMod Skin App</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Mod trang phục full hiệu ứng</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Play Store</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d4"><a href="https://play.google.com/store/apps/details?id=com.noxinfinity.modskin" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">04</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Nox Infinity Mod Skin</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Công cụ mod skin VIP</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Play Store</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div></div></div></section><section id="free-fire" class="relative z-10 scroll-mt-20 px-4 py-16 sm:px-6 sm:py-24"><div class="mx-auto w-full max-w-6xl"><div class="reveal"><div class="relative overflow-hidden rounded-2xl"><div class="relative aspect-[16/7] min-h-[12rem] sm:min-h-[16rem]"><img src="/games/freefire-cover.jpg" alt="" class="absolute inset-0 h-full w-full object-cover"/><div class="absolute inset-0 bg-gradient-to-r from-bg via-bg/55 to-bg/20"></div><div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent"></div><div class="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-8"><div class="flex items-end gap-4"><img src="/games/freefire.jpg" alt="" class="hidden h-16 w-28 rounded-md object-cover sm:block"/><div><p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-muted">Garena FF</p><h2 class="mt-1 font-display text-3xl font-semibold tracking-[-0.045em] text-fg sm:text-5xl">Free Fire</h2><p class="mt-3 max-w-lg text-sm leading-relaxed text-muted sm:text-base">Pack skin, APK và zip mod cho Free Fire — tải trực tiếp từ Mediafire, tự kiểm tra tệp trước khi cài.</p></div></div><a href="https://ff.garena.com/vn/" target="_blank" rel="noreferrer noopener" class="inline-flex h-11 shrink-0 items-center gap-2 rounded-md px-4 text-sm font-medium text-fg shadow-[var(--shadow-border)] transition-[box-shadow,transform] duration-[var(--motion-quick)] ease-[var(--ease-out)] hover:shadow-[var(--shadow-border-hover)] active:scale-[0.96]">Trang chủ<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div></div></div><div class="mt-8 grid gap-3"><div class="reveal reveal-d1"><a href="https://www.mediafire.com/file/o576x5ubjdeb4yj/SkinFF-v5.6.apk/file" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">01</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Skin FF v5.6.apk</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Tải Mediafire</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d2"><a href="https://www.mediafire.com/file/ifgxdrws6i9vbsl/Thanhdo+V5.0.apk/file" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">02</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Thanhdo V5.0.apk</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Tải Mediafire</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d3"><a href="https://www.mediafire.com/file/1g1635ou4j7n0e3/Mod_Skin_M1887_V%25C6%25B0%25C6%25A1ng_Qu%25E1%25BB%2591c_C%25C3%25A1t_Tr%25C3%25AAn_Skin_Phong_X%25C3%25A0_Free_Fire_OB55_-_KM_Mod_FF.zip/file?dkey=84y08r7bz8b&amp;r=1214" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">03</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">M1887 Vương Quốc Cát</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Zip mod OB55</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d4"><a href="https://www.mediafire.com/file/f23j7tngwe2j8df/MOD_SKIN_V%25C6%25AF%25C6%25A0NG_QU%25E1%25BB%2590C_C%25C3%2581T_%25C3%2581NH_SAO_TH%25E1%25BA%25A6N_THO%25E1%25BA%25A6N_FFTH_C%25C3%2593_%25C3%2582M_THANH.zip/file?dkey=dp4d1eqp6gl&amp;r=380" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">04</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Vương Quốc Cát Ánh Sao</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Mod có âm thanh</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal"><a href="https://www.mediafire.com/file/7d4m5gtog9jru97/MOD_SKIN_M1887_M%25E1%25BB%258CI_LEVEL_CHO_ANDROID_V2.zip/file?dkey=kw7j1shvvfs&amp;r=56" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">05</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">M1887 Mọi Level V2</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Android zip mod</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div></div></div></section><section id="roblox" class="relative z-10 scroll-mt-20 px-4 py-16 sm:px-6 sm:py-24"><div class="mx-auto w-full max-w-6xl"><div class="reveal"><div class="relative overflow-hidden rounded-2xl"><div class="relative aspect-[16/7] min-h-[12rem] sm:min-h-[16rem]"><img src="/games/roblox-cover.jpg" alt="" class="absolute inset-0 h-full w-full object-cover"/><div class="absolute inset-0 bg-gradient-to-r from-bg via-bg/55 to-bg/20"></div><div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent"></div><div class="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-8"><div class="flex items-end gap-4"><img src="/games/roblox.jpg" alt="" class="hidden h-16 w-28 rounded-md object-cover sm:block"/><div><p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-muted">VNG &amp; Global</p><h2 class="mt-1 font-display text-3xl font-semibold tracking-[-0.045em] text-fg sm:text-5xl">Roblox</h2><p class="mt-3 max-w-lg text-sm leading-relaxed text-muted sm:text-base">Fix lag, gói mod và client Delta cho Roblox — Ipas cho iOS, Mediafire cho APK Android.</p></div></div><a href="https://roblox.vnggames.com" target="_blank" rel="noreferrer noopener" class="inline-flex h-11 shrink-0 items-center gap-2 rounded-md px-4 text-sm font-medium text-fg shadow-[var(--shadow-border)] transition-[box-shadow,transform] duration-[var(--motion-quick)] ease-[var(--ease-out)] hover:shadow-[var(--shadow-border-hover)] active:scale-[0.96]">Trang chủ<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div></div></div><div class="reveal reveal-d1"><div class="mt-5 flex flex-wrap gap-2"><a href="https://roblox.vnggames.com" target="_blank" rel="noreferrer noopener" class="inline-flex h-10 items-center rounded-md px-3 text-sm text-muted shadow-[var(--shadow-border)] transition-colors duration-[var(--motion-quick)] hover:text-fg">Roblox VNG</a></div></div><div class="mt-8 grid gap-3"><div class="reveal reveal-d1"><a href="https://ipas.cc/vh2sk1" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">01</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Roblox Quốc Tế Fix Lag</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Tải Ipas</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Ipas</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d2"><a href="https://ipas.cc/mut7wy" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">02</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Roblox Mod Package 1</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Tải Ipas</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Ipas</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d3"><a href="https://ipas.cc/epnis0" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">03</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Roblox Mod Package 2</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Tải Ipas</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Ipas</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal reveal-d4"><a href="https://ipas.cc/tsx4oy" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">04</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Roblox Mod Package 3</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Tải Ipas</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Ipas</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal"><a href="https://www.mediafire.com/folder/bypyqewqvpqhh/Delta+Vng+Login+V2.740" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">05</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Delta VNG Login v2.740</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Thư mục Mediafire</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal"><a href="https://www.mediafire.com/file/tkd5fytmr9de24i/Delta_Vng_v2.740.apk/file?dkey=0t498ko13fl&amp;r=1922" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">06</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Delta VNG v2.740 APK</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Client VNG Hack Exec</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div><div class="reveal"><a href="https://www.mediafire.com/file/z1462k22i8m8hga/Delta_Quoc_Te_V2.740%25282%2529.apk/file" target="_blank" rel="noreferrer noopener" class="download-row group flex min-h-16 items-center gap-4 rounded-xl bg-surface p-3 pl-4 sm:p-4 sm:pl-5"><span class="w-8 shrink-0 font-display text-sm tabular-nums text-subtle">07</span><span class="min-w-0 flex-1"><span class="block truncate text-sm font-medium text-fg sm:text-base">Delta Quốc Tế v2.740</span><span class="mt-0.5 block truncate text-xs text-muted sm:text-sm">Client Global APK</span></span><span class="hidden rounded-sm px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-muted shadow-[var(--shadow-border)] sm:inline">Mediafire</span><span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-fg transition-transform duration-150 ease-out group-active:scale-[0.96]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download size-4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg></span></a></div></div></div></section></main><footer class="relative z-10 px-4 pb-10 pt-8 sm:px-6 sm:pb-14"><div class="mx-auto flex w-full max-w-6xl flex-col items-start gap-3 border-t border-border pt-8"><a href="https://www.facebook.com/share/1RBFxRjUZQ/" target="_blank" rel="noreferrer noopener" class="text-sm font-medium text-sponsor transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)] hover:text-sponsor-hover">Nhà tài trợ — Tổng số tiền tài trợ: 0k</a><p class="text-xs tracking-[0.18em] text-subtle">chịu chết</p></div></footer></div><!--/$--><script data-tsr-stream-part="">(self.$R=self.$R||{})["tsr"]=[];self.$_TSR={h(){this.hydrated=!0,this.c()},e(){this.streamEnded=!0,this.c()},c(){this.hydrated&&this.streamEnded&&(delete self.$_TSR,delete self.$R.tsr)},p(e){this.initialized?e():this.buffer.push(e)},buffer:[]};$_TSR.router=($R=>$R[0]={manifest:$R[1]={routes:$R[2]={__root__:$R[3]={preloads:$R[4]=["/@id/virtual:tanstack-start-dev-client-entry"],scripts:$R[5]=[$R[6]={attrs:$R[7]={type:"module",async:!0,src:"/@id/virtual:tanstack-start-dev-client-entry"}}],css:$R[8]=[$R[9]={href:"/@tanstack-start/styles.css?routes=__root__%2C%2F","data-tanstack-router-dev-styles":!0}]}}},matches:$R[10]=[$R[11]={i:"__root__",u:1791352820785,s:"success",ssr:!0},$R[12]={i:"",u:1791352820785,s:"success",ssr:!0}]})($R["tsr"]);$_TSR.e();{let s=document.currentScript,p;while((p=s.previousElementSibling)&&p.hasAttribute('data-tsr-stream-part'))p.remove();s.remove()}</script><script type="module" async="" src="/@id/virtual:tanstack-start-dev-client-entry"></script><script>document.currentScript.remove();/*$tsr-stream-boundary*/</script></body></html>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#05070e',
+                            panel: '#0d121f',
+                            border: '#1e293b',
+                            neon: '#00f0ff',
+                            pink: '#ff0055',
+                            purple: '#7000ff',
+                            green: '#00ff66',
+                            gold: '#ffb700'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Three.js Base & Controls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- Pyodide WASM Python Engine -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #05070e;
+            color: #f3f4f6;
+            overflow: hidden;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d121f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+
+        .glow-neon {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+        .glow-pink {
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+        }
+
+        /* Line Numbers Styling */
+        .line-numbers {
+            font-family: 'Fira Code', monospace;
+            user-select: none;
+        }
+
+        .editor-textarea {
+            font-family: 'Fira Code', monospace;
+            tab-size: 4;
+            white-space: pre;
+            word-break: normal;
+        }
+
+        .glass-panel {
+            background: rgba(13, 18, 31, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col relative select-none">
+
+    <!-- Header Navbar -->
+    <header class="h-14 bg-cyber-panel/90 border-b border-cyber-border px-4 flex items-center justify-between z-20 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-cyber-pink via-cyber-purple to-cyber-neon p-0.5 flex items-center justify-center">
+                <div class="w-full h-full bg-cyber-bg rounded-[7px] flex items-center justify-center">
+                    <i class="fa-brands fa-python text-cyber-neon text-lg"></i>
+                </div>
+            </div>
+            <div>
+                <h1 class="font-black text-base tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyber-neon via-white to-cyber-pink uppercase flex items-center gap-2">
+                    CYBER-PY <span class="text-[10px] px-2 py-0.5 rounded bg-cyber-neon/10 text-cyber-neon border border-cyber-neon/30">3D WASM</span>
+                </h1>
+            </div>
+        </div>
+
+        <!-- Pyodide Engine Status Indicator -->
+        <div class="flex items-center gap-3">
+            <div id="pyodide-status" class="flex items-center gap-2 text-xs bg-cyber-bg/80 border border-cyber-border px-3 py-1.5 rounded-full text-gray-400">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse" id="status-dot"></span>
+                <span id="status-text">Loading Python Engine...</span>
+            </div>
+
+            <button id="toggle-editor-btn" class="sm:hidden text-cyber-neon p-2 bg-cyber-bg rounded border border-cyber-border">
+                <i class="fa-solid fa-code"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <div class="flex-1 relative flex overflow-hidden">
+        
+        <!-- 3D Canvas Background -->
+        <div id="canvas-container" class="absolute inset-0 z-0 cursor-grab active:cursor-grabbing"></div>
+
+        <!-- Floating Quick Preset Controls overlay top-left -->
+        <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2 pointer-events-auto max-w-[calc(100%-20px)] sm:max-w-md">
+            <button onclick="loadExample('matrix')" class="px-3 py-1.5 rounded-lg glass-panel text-xs text-cyber-neon border border-cyber-neon/30 hover:bg-cyber-neon/20 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-cubes"></i> Cube Matrix
+            </button>
+            <button onclick="loadExample('rainbow')" class="px-3 py-1.5 rounded-lg glass-panel text-xs text-cyber-pink border border-cyber-pink/30 hover:bg-cyber-pink/20 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Rainbow Orbit
+            </button>
+            <button onclick="loadExample('wave')" class="px-3 py-1.5 rounded-lg glass-panel text-xs text-cyber-gold border border-cyber-gold/30 hover:bg-cyber-gold/20 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-wave-square"></i> Wave Mesh
+            </button>
+        </div>
+
+        <!-- Floating Sidebar Code Editor & Terminal Panel -->
+        <aside id="editor-panel" class="absolute top-0 right-0 h-full w-full sm:w-[500px] md:w-[580px] glass-panel border-l border-cyber-border z-10 flex flex-col transition-transform duration-300">
+            
+            <!-- Editor Toolbar -->
+            <div class="h-11 bg-cyber-panel/90 border-b border-cyber-border px-4 flex items-center justify-between">
+                <div class="flex items-center gap-2 text-xs font-mono text-gray-300">
+                    <i class="fa-solid fa-code text-cyber-neon"></i>
+                    <span>script.py</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="clear-scene-btn" class="px-2.5 py-1 text-xs rounded bg-cyber-bg border border-cyber-border text-gray-400 hover:text-white hover:border-gray-500 transition" title="Clear 3D Scene">
+                        <i class="fa-solid fa-trash-can"></i> Clear 3D
+                    </button>
+                    
+                    <button id="run-btn" disabled class="px-4 py-1 text-xs font-bold rounded bg-cyber-neon text-cyber-bg hover:bg-cyan-300 transition flex items-center gap-1.5 glow-neon disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-play"></i> RUN SCRIPT
+                    </button>
+                </div>
+            </div>
+
+            <!-- Code Editor Area -->
+            <div class="flex-1 flex relative overflow-hidden bg-cyber-bg/90 font-mono text-sm">
+                <!-- Line Numbers -->
+                <div id="line-numbers" class="w-12 py-3 px-1 text-right text-gray-600 bg-cyber-panel/40 border-r border-cyber-border/40 select-none text-xs leading-6">
+                    1
+                </div>
+
+                <!-- Textarea Editor -->
+                <textarea id="code-editor" class="flex-1 py-3 px-3 bg-transparent text-cyber-neon editor-textarea focus:outline-none resize-none leading-6 text-xs sm:text-sm" spellcheck="false" placeholder="# Write Python code here..."></textarea>
+            </div>
+
+            <!-- Console Output Terminal -->
+            <div class="h-44 sm:h-52 bg-black/90 border-t border-cyber-border flex flex-col font-mono text-xs">
+                <div class="h-8 bg-cyber-panel/80 px-3 border-b border-cyber-border/50 flex items-center justify-between text-gray-400">
+                    <span class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold">
+                        <i class="fa-solid fa-terminal text-cyber-green"></i> Python Terminal Stdout
+                    </span>
+                    <button id="clear-console-btn" class="hover:text-white text-[10px]">Clear Output</button>
+                </div>
+                
+                <div id="console-output" class="flex-1 p-3 overflow-y-auto space-y-1 text-gray-300 leading-relaxed select-text">
+                    <div class="text-gray-500">// Terminal output will appear here...</div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- MAIN JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. THREE.JS 3D SCENE SETUP ---
+        let scene, camera, renderer, controls;
+        let pyObjects = []; // Stores meshes created by user scripts
+        let mainCoreMesh = null;
+        let particleSystem = null;
+        let sceneLights = {};
+
+        function init3D() {
+            const container = document.getElementById('canvas-container');
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x05070e);
+            scene.fog = new THREE.FogExp2(0x05070e, 0.03);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 5, 12);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // Orbit Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxDistance = 50;
+
+            // Grid Floor
+            const gridHelper = new THREE.GridHelper(30, 30, 0x00f0ff, 0x1e293b);
+            gridHelper.position.y = -2;
+            scene.add(gridHelper);
+
+            // Lights
+            sceneLights.ambient = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(sceneLights.ambient);
+
+            sceneLights.neonPoint = new THREE.PointLight(0x00f0ff, 3, 20);
+            sceneLights.neonPoint.position.set(0, 4, 0);
+            scene.add(sceneLights.neonPoint);
+
+            sceneLights.pinkPoint = new THREE.PointLight(0xff0055, 3, 20);
+            sceneLights.pinkPoint.position.set(-5, -1, 3);
+            scene.add(sceneLights.pinkPoint);
+
+            // Central Cyber Core Mesh
+            createCentralCore();
+
+            // Background Ambient Particles
+            createCyberParticles();
+
+            // Resize Event
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createCentralCore() {
+            const group = new THREE.Group();
+
+            const geo = new THREE.IcosahedronGeometry(1.5, 0);
+            const mat = new THREE.MeshStandardMaterial({
+                color: 0x00f0ff,
+                wireframe: true,
+                emissive: 0x00f0ff,
+                emissiveIntensity: 0.5
+            });
+
+            mainCoreMesh = new THREE.Mesh(geo, mat);
+            group.add(mainCoreMesh);
+
+            const innerGeo = new THREE.OctahedronGeometry(0.8, 0);
+            const innerMat = new THREE.MeshBasicMaterial({ color: 0xff0055, wireframe: true });
+            const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+            group.add(innerMesh);
+
+            group.position.y = 1;
+            scene.add(group);
+        }
+
+        function createCyberParticles() {
+            const particleCount = 150;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 40;
+                positions[i + 1] = Math.random() * 20 - 2;
+                positions[i + 2] = (Math.random() - 0.5) * 40;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0x00f0ff,
+                size: 0.08,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('canvas-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        let rotationSpeed = 0.01;
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (mainCoreMesh) {
+                mainCoreMesh.rotation.x += rotationSpeed;
+                mainCoreMesh.rotation.y += rotationSpeed * 1.5;
+            }
+
+            if (particleSystem) {
+                particleSystem.rotation.y += 0.0005;
+            }
+
+            // Animate user created meshes if marked for animation
+            pyObjects.forEach(obj => {
+                if (obj.userData && obj.userData.autoRotate) {
+                    obj.rotation.x += 0.01;
+                    obj.rotation.y += 0.02;
+                }
+            });
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // --- 2. PYTHON ENGINE (PYODIDE WASM) INTEGRATION & BINDINGS ---
+        let pyodide = null;
+
+        // Exposed JavaScript functions accessible directly inside Python
+        window.cyber3D = {
+            spawnCube: function(x, y, z, colorHex = '#00f0ff', size = 1) {
+                const geo = new THREE.BoxGeometry(size, size, size);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: new THREE.Color(colorHex),
+                    roughness: 0.3,
+                    metalness: 0.8
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(x, y, z);
+                mesh.userData.autoRotate = true;
+                scene.add(mesh);
+                pyObjects.push(mesh);
+                return pyObjects.length - 1;
+            },
+
+            spawnSphere: function(x, y, z, colorHex = '#ff0055', radius = 0.6) {
+                const geo = new THREE.SphereGeometry(radius, 16, 16);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: new THREE.Color(colorHex),
+                    wireframe: true
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(x, y, z);
+                mesh.userData.autoRotate = true;
+                scene.add(mesh);
+                pyObjects.push(mesh);
+                return pyObjects.length - 1;
+            },
+
+            setCoreColor: function(colorHex) {
+                if (mainCoreMesh) {
+                    mainCoreMesh.material.color.set(colorHex);
+                    mainCoreMesh.material.emissive.set(colorHex);
+                }
+            },
+
+            setRotationSpeed: function(speed) {
+                rotationSpeed = parseFloat(speed);
+            },
+
+            setLightColor: function(lightName, colorHex) {
+                if (sceneLights[lightName]) {
+                    sceneLights[lightName].color.set(colorHex);
+                }
+            },
+
+            clearScene: function() {
+                pyObjects.forEach(obj => scene.remove(obj));
+                pyObjects = [];
+            }
+        };
+
+        async function initPyodideEngine() {
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            const runBtn = document.getElementById('run-btn');
+
+            try {
+                pyodide = await loadPyodide();
+                
+                // Redirect Python stdout/stderr to our custom terminal
+                pyodide.setStdout({
+                    write: (str) => appendConsole(str, 'stdout')
+                });
+                pyodide.setStderr({
+                    write: (str) => appendConsole(str, 'stderr')
+                });
+
+                // Inject initial Python helper wrapper module
+                await pyodide.runPythonAsync(`
+import js
+
+def spawn_cube(x=0, y=0, z=0, color='#00f0ff', size=1):
+    return js.cyber3D.spawnCube(x, y, z, color, size)
+
+def spawn_sphere(x=0, y=0, z=0, color='#ff0055', radius=0.6):
+    return js.cyber3D.spawnSphere(x, y, z, color, radius)
+
+def set_color(color_hex):
+    js.cyber3D.setCoreColor(color_hex)
+
+def set_rotation_speed(speed):
+    js.cyber3D.setRotationSpeed(speed)
+
+def set_light(light_name, color_hex):
+    js.cyber3D.setLightColor(light_name, color_hex)
+
+def clear_scene():
+    js.cyber3D.clearScene()
+`);
+
+                statusText.innerText = "Python 3.11 WASM Ready";
+                statusText.classList.remove('text-gray-400');
+                statusText.classList.add('text-cyber-neon');
+                statusDot.classList.remove('bg-amber-500');
+                statusDot.classList.add('bg-cyber-neon');
+                runBtn.disabled = false;
+
+                appendConsole("System: Python Engine initialized successfully.", "system");
+
+            } catch (err) {
+                statusText.innerText = "Engine Error";
+                statusDot.classList.remove('bg-amber-500');
+                statusDot.classList.add('bg-red-500');
+                appendConsole("Engine Load Error: " + err.message, "stderr");
+            }
+        }
+
+        // --- 3. EDITOR & TERMINAL UI CONTROLS ---
+        const codeEditor = document.getElementById('code-editor');
+        const lineNumbers = document.getElementById('line-numbers');
+        const consoleOutput = document.getElementById('console-output');
+
+        // Line Numbers Auto-Update
+        function updateLineNumbers() {
+            const lines = codeEditor.value.split('\n').length;
+            lineNumbers.innerHTML = Array.from({ length: lines }, (_, i) => i + 1).join('<br>');
+        }
+
+        codeEditor.addEventListener('input', updateLineNumbers);
+
+        // Handle Tab key in Textarea
+        codeEditor.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = codeEditor.selectionStart;
+                const end = codeEditor.selectionEnd;
+                codeEditor.value = codeEditor.value.substring(0, start) + "    " + codeEditor.value.substring(end);
+                codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
+                updateLineNumbers();
+            }
+        });
+
+        function appendConsole(text, type = 'stdout') {
+            if (!text.trim() && type === 'stdout') return;
+            const div = document.createElement('div');
+            
+            if (type === 'stderr') {
+                div.className = 'text-red-400 font-mono text-xs';
+            } else if (type === 'system') {
+                div.className = 'text-cyber-neon font-mono text-xs italic';
+            } else {
+                div.className = 'text-gray-300 font-mono text-xs';
+            }
+            
+            div.innerText = text;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        document.getElementById('clear-console-btn').addEventListener('click', () => {
+            consoleOutput.innerHTML = '';
+        });
+
+        document.getElementById('clear-scene-btn').addEventListener('click', () => {
+            window.cyber3D.clearScene();
+            appendConsole("System: 3D Scene cleared.", "system");
+        });
+
+        // Run Python Script Execution
+        document.getElementById('run-btn').addEventListener('click', async () => {
+            if (!pyodide) return;
+            
+            const code = codeEditor.value;
+            appendConsole(`>>> Executing Python script...`, "system");
+
+            try {
+                await pyodide.runPythonAsync(code);
+                appendConsole(`<<< Script finished execution.`, "system");
+            } catch (err) {
+                appendConsole(err.message, "stderr");
+            }
+        });
+
+        // Preset Examples
+        const examples = {
+            matrix: `# Python 3D Cube Matrix Generator
+clear_scene()
+set_color("#00f0ff")
+set_rotation_speed(0.02)
+
+print("Building 3D Cube Grid...")
+colors = ["#00f0ff", "#ff0055", "#7000ff", "#ffb700"]
+
+count = 0
+for x in range(-2, 3, 2):
+    for z in range(-2, 3, 2):
+        if x == 0 and z == 0:
+            continue
+        c = colors[count % len(colors)]
+        spawn_cube(x, 0, z, color=c, size=0.8)
+        count += 1
+
+print(f"Spawned {count} interactive cubes!")`,
+
+            rainbow: `# Rainbow Sphere Orbit Simulation
+import math
+
+clear_scene()
+set_color("#ff0055")
+set_rotation_speed(0.05)
+
+print("Deploying Orbital Spheres...")
+total_spheres = 12
+radius = 4
+
+for i in range(total_spheres):
+    angle = (i / total_spheres) * 2 * math.pi
+    x = math.cos(angle) * radius
+    z = math.sin(angle) * radius
+    
+    # Alternate heights
+    y = math.sin(i) * 1.5
+    
+    spawn_sphere(x, y, z, color="#00f0ff", radius=0.4)
+
+print("Orbital spheres active.")`,
+
+            wave: `# Futuristic Wave Pattern
+import math
+
+clear_scene()
+set_color("#7000ff")
+set_rotation_speed(0.005)
+
+print("Generating 3D Wave Grid...")
+grid_size = 5
+
+for x in range(-grid_size, grid_size + 1):
+    for z in range(-grid_size, grid_size + 1):
+        dist = math.sqrt(x**2 + z**2)
+        y = math.sin(dist * 0.8) * 1.2
+        
+        color = "#00ff66" if y > 0 else "#ff0055"
+        spawn_cube(x * 1.2, y, z * 1.2, color=color, size=0.4)
+
+print("Wave grid generated successfully!")`
+        };
+
+        window.loadExample = function(name) {
+            if (examples[name]) {
+                codeEditor.value = examples[name];
+                updateLineNumbers();
+            }
+        };
+
+        // Mobile panel toggle
+        document.getElementById('toggle-editor-btn').addEventListener('click', () => {
+            const panel = document.getElementById('editor-panel');
+            panel.classList.toggle('translate-x-full');
+        });
+
+        // Initialize App on Window Load
+        window.onload = () => {
+            init3D();
+            animate();
+            loadExample('matrix');
+            initPyodideEngine();
+        };
+    </script>
+</body>
+  </html>
